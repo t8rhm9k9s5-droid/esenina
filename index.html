@@ -14,20 +14,20 @@
 <title>Есенина — 3D-модель квартиры</title>
 <style>
 :root{--dock-b:max(18px,calc(env(safe-area-inset-bottom,0px) - 16px))}
-html{min-height:100%;overscroll-behavior:none}
-body{margin:0;min-height:100%;overscroll-behavior:none;background:#e9e7e2;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color:#222}
+html{min-height:100%;overscroll-behavior:none;background:#2a2b30}
+body{margin:0;min-height:calc(100% + 1px);overscroll-behavior:none;background:#2a2b30;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color:#222}
 #c{position:fixed;top:0;left:0;right:0;height:var(--H,100%);touch-action:none}
-#top{position:fixed;top:0;left:0;right:0;padding:calc(10px + env(safe-area-inset-top,0px)) 12px 6px;pointer-events:none;background:transparent}
-#bInfo{position:absolute;right:12px;top:calc(10px + env(safe-area-inset-top,0px));width:32px;height:32px;border-radius:16px;pointer-events:auto;background:rgba(255,255,255,.55);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);border:.5px solid rgba(255,255,255,.7);box-shadow:0 4px 14px rgba(0,0,0,.18);font-size:17px;font-weight:700;color:#1d2a22;padding:0}
-#bInfo.on{background:#2f5d45;color:#fff}
+#top{position:fixed;top:0;left:0;right:0;padding:calc(env(safe-area-inset-top) + 8px) 12px 6px;pointer-events:none}
+#bar #bInfo{grid-column:4;grid-row:1 / span 2;align-self:center;justify-self:center;width:34px;height:34px;padding:0;border-radius:17px;font-size:17px;font-weight:700;background:rgba(255,255,255,.7);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+#bar #bInfo.on{background:#2f5d45;color:#fff}
 #top h1{margin:0;font-size:16px;font-weight:600;background:rgba(255,255,255,.85);display:inline-block;padding:6px 10px;border-radius:10px;pointer-events:auto}
 button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;font:inherit;border:0;cursor:pointer}
-#bar{position:fixed;z-index:60;left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));bottom:calc(var(--dock-b,18px) - var(--gap,0px));display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:5px;border-radius:24px;background:rgba(255,255,255,.55);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);border:.5px solid rgba(255,255,255,.7);box-shadow:0 8px 28px rgba(0,0,0,.14);max-width:520px;margin:0 auto}
+#bar{position:fixed;z-index:60;left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));bottom:calc(var(--dock-b,18px) - var(--gap,0px));display:grid;grid-template-columns:repeat(3,1fr) 42px;gap:4px;padding:5px;border-radius:24px;background:rgba(255,255,255,.55);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);border:.5px solid rgba(255,255,255,.7);box-shadow:0 8px 28px rgba(0,0,0,.14);max-width:520px;margin:0 auto}
 #bar button,#legs button{height:34px;padding:0 6px;border-radius:17px;background:transparent;box-shadow:none;font-size:12.5px;font-weight:500;color:#1d2a22;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #bar button.on,#legs button.on{background:#2f5d45;color:#fff}
 #legs{position:fixed;z-index:60;left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));bottom:calc(var(--dock-b,18px) - var(--gap,0px) + 92px);display:none;grid-template-columns:repeat(2,1fr);gap:4px;padding:5px;border-radius:24px;background:rgba(255,255,255,.55);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);border:.5px solid rgba(255,255,255,.7);box-shadow:0 8px 28px rgba(0,0,0,.14);max-width:520px;margin:0 auto}
 #legs.show{display:grid}
-#info{position:fixed;top:calc(env(safe-area-inset-top) + 48px);right:10px;left:10px;max-width:420px;margin-left:auto;max-height:60vh;overflow:auto;background:rgba(255,255,255,.96);border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.4;display:none;box-shadow:0 4px 18px rgba(0,0,0,.2)}
+#info{position:fixed;bottom:calc(var(--dock-b,18px) - var(--gap,0px) + 96px);right:10px;left:10px;max-width:420px;margin-left:auto;max-height:60vh;overflow:auto;background:rgba(255,255,255,.96);border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.4;display:none;box-shadow:0 4px 18px rgba(0,0,0,.2)}
 #info.show{display:block}
 #info h3{margin:8px 0 4px;font-size:14px}
 #info ul{margin:0;padding-left:18px}
@@ -35,10 +35,15 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-se
 </head>
 <body>
 <div id="c"></div>
-<div id="top"><h1>Есенина · как сейчас</h1><button id="bInfo" aria-label="Справка">!</button></div>
 <div id="info">
-<h3 style="margin-top:0">Есенина · версия 1.0.0</h3>
+<h3 style="margin-top:0">Есенина · версия 1.0.1</h3>
+<p id="diag" style="margin:0 0 6px;color:#777;font-size:12px"></p>
 <p style="margin:0 0 6px;color:#555">Нумерация: 1.x.0 — новый этап, 1.0.x — исправления внутри этапа.</p>
+<h3>1.0.1 · 17.11.2026 — исправления</h3>
+<ul>
+<li>Убрана надпись сверху, кнопка «!» перенесена в нижнее меню</li>
+<li>Полный экран на iPhone с иконки: модель и меню считаются от реальной высоты экрана</li>
+</ul>
 <h3>1.0.0 · 17.11.2026 — этап 1: квартира «как сейчас»</h3>
 <ul>
 <li>Кухня по плану, без холодильника (место под него около 1,2 м); верхние шкафы только над газовой колонкой — двухъярусные, в нишу до потолка; отопление центральное; фасады голубые, столешница сосна, фартук — белый кабанчик на 1 м от столешницы (кроме места холодильника), вытяжка-зонт, духовой шкаф под варочной панелью; пенала нет; от последней тумбы до стены около 1,2 м — место под холодильник</li>
@@ -73,6 +78,7 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-se
 <button id="b3d">3D</button>
 <button id="bLbl" class="on">Подписи</button>
 <button id="bLegs">Опоры</button>
+<button id="bInfo" aria-label="Справка">!</button>
 </div>
 <div id="legs">
 <button data-v="1" class="on">П-опоры металл</button>
@@ -85,7 +91,9 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-se
 <script>
 const H=3100, CUT=1150;
 const wrap=document.getElementById('c');
-function fitScreen(){const sh=(navigator.standalone&&screen.height>innerHeight)?screen.height:innerHeight;
+function fitScreen(){const app=navigator.standalone||matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches;
+ const scr=(innerWidth>innerHeight)?Math.min(screen.width,screen.height):Math.max(screen.width,screen.height);
+ const sh=(app&&scr>innerHeight)?scr:innerHeight;
  document.documentElement.style.setProperty('--H',sh+'px');
  const gap=Math.max(0,sh-innerHeight);document.documentElement.style.setProperty('--gap',gap+'px');}
 fitScreen();
@@ -486,7 +494,7 @@ document.getElementById('b3d').onclick=()=>setView(false);
 function setNight(on){hemi.intensity=on?0.28:0.8;sun.intensity=on?0.0:0.55;night.forEach(l=>l.intensity=on?1.2:0);glowM.visible=on;mat.lamp.emissiveIntensity=on?2.2:0.6;scene.background.set(on?0x2a2b30:0xe9e7e2);}
 setNight(true); // интерьер светлый — всегда вечерний режим
 document.getElementById('bLbl').onclick=e=>{labels.visible=!labels.visible;e.target.classList.toggle('on',labels.visible);};
-document.getElementById('bInfo').onclick=e=>{const i=document.getElementById('info');i.classList.toggle('show');e.target.classList.toggle('on',i.classList.contains('show'));};
+document.getElementById('bInfo').onclick=e=>{const d=document.getElementById('diag');if(d)d.textContent='Экран '+screen.height+' · окно '+innerHeight+' · модель '+VH()+' · режим '+((navigator.standalone||matchMedia('(display-mode: standalone)').matches)?'иконка':'браузер');const i=document.getElementById('info');i.classList.toggle('show');e.target.classList.toggle('on',i.classList.contains('show'));};
 document.getElementById('bLegs').onclick=e=>{const l=document.getElementById('legs');l.classList.toggle('show');e.target.classList.toggle('on',l.classList.contains('show'));
  if(l.classList.contains('show')){camera.position.set(3.4,3.3,11.2);controls.target.set(1.95,0.45,9.67);controls.update();}};
 document.querySelectorAll('#legs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#legs button').forEach(x=>x.classList.remove('on'));b.classList.add('on');setLegs(+b.dataset.v);});
