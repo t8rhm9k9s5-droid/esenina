@@ -18,28 +18,20 @@ html{min-height:100%;overscroll-behavior:none;background:#2a2b30}
 body{margin:0;min-height:calc(100% + 1px);overscroll-behavior:none;background:#2a2b30;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color:#222}
 #c{position:fixed;top:0;left:0;right:0;height:var(--H,100%);touch-action:none}
 #top{position:fixed;top:0;left:0;right:0;padding:calc(env(safe-area-inset-top) + 8px) 12px 6px;pointer-events:none}
+#docsBar{z-index:3}
 #docs{position:fixed;left:0;right:0;top:0;height:var(--H,100%);z-index:90;background:#2a2b30;display:none;touch-action:none}
 #docs.show{display:block}
-#docsTop{position:absolute;left:0;right:0;top:0;padding:calc(10px + env(safe-area-inset-top,0px)) 12px 8px;display:flex;gap:6px;align-items:center;z-index:2}
-#docTabs{display:flex;gap:2px;overflow-x:auto;flex:1;scrollbar-width:none;padding:5px;border-radius:24px;background:rgba(255,255,255,.22);-webkit-backdrop-filter:blur(30px) saturate(200%);backdrop-filter:blur(30px) saturate(200%);border:.5px solid rgba(255,255,255,.45);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 10px 30px rgba(0,0,0,.28)}
-#docTabs button{flex:none;height:34px;padding:0 13px;border-radius:17px;background:transparent;font-size:13px;font-weight:500;color:rgba(255,255,255,.92);text-shadow:0 1px 2px rgba(0,0,0,.35)}
-#docsClose{flex:none;width:44px;height:44px;padding:0;border-radius:22px;font-size:16px;color:#fff;background:rgba(255,255,255,.22);-webkit-backdrop-filter:blur(30px) saturate(200%);backdrop-filter:blur(30px) saturate(200%);border:.5px solid rgba(255,255,255,.45);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 10px 30px rgba(0,0,0,.28)}
-#docTabs button.on{background:rgba(120,200,160,.28);color:#d9ffe9}
 #docView{position:absolute;inset:0;overflow:hidden;touch-action:none}
-#docNote{position:absolute;left:12px;right:12px;top:calc(66px + env(safe-area-inset-top,0px));z-index:2;font-size:12px;line-height:1.35;color:rgba(255,255,255,.88);border-radius:16px;padding:7px 12px;background:rgba(255,255,255,.22);-webkit-backdrop-filter:blur(30px) saturate(200%);backdrop-filter:blur(30px) saturate(200%);border:.5px solid rgba(255,255,255,.45);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 10px 30px rgba(0,0,0,.28)}
-#docPager{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(var(--dock-b,18px) - var(--gap,0px));z-index:2;display:none;align-items:center;gap:6px;padding:4px;border-radius:24px;background:rgba(255,255,255,.22);-webkit-backdrop-filter:blur(30px) saturate(200%);backdrop-filter:blur(30px) saturate(200%);border:.5px solid rgba(255,255,255,.45);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 10px 30px rgba(0,0,0,.28)}
-#docPager.show{display:flex}
-#docPager button{width:44px;height:38px;border-radius:19px;background:transparent;font-size:24px;color:#fff}
-#pgNum{font-size:13px;font-weight:600;color:#fff;min-width:48px;text-align:center}
+#docNote{position:absolute;left:12px;right:12px;top:calc(10px + env(safe-area-inset-top,0px));z-index:2;font-size:12px;line-height:1.35;color:rgba(255,255,255,.88);border-radius:16px;padding:7px 12px;background:rgba(255,255,255,.22);-webkit-backdrop-filter:blur(30px) saturate(200%);backdrop-filter:blur(30px) saturate(200%);border:.5px solid rgba(255,255,255,.45);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 10px 30px rgba(0,0,0,.28)}
 #docImg{position:absolute;left:0;top:0;transform-origin:0 0;box-shadow:0 10px 40px rgba(0,0,0,.45);border-radius:4px;max-width:none;user-select:none;-webkit-user-select:none;-webkit-user-drag:none;pointer-events:none}
 #top h1{margin:0;font-size:16px;font-weight:600;background:rgba(255,255,255,.85);display:inline-block;padding:6px 10px;border-radius:10px;pointer-events:auto}
 /*dock*/
-#bar{position:fixed;z-index:60;left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));bottom:calc(var(--dock-b,18px) - var(--gap,0px));display:grid;grid-template-columns:repeat(3,1fr) 1px 1fr;gap:2px;padding:6px;border-radius:26px;background:rgba(255,255,255,.22);-webkit-backdrop-filter:blur(30px) saturate(200%);backdrop-filter:blur(30px) saturate(200%);border:.5px solid rgba(255,255,255,.45);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 10px 30px rgba(0,0,0,.28);max-width:520px;margin:0 auto}
-#bar .sep{grid-column:4;grid-row:1 / span 2;background:rgba(255,255,255,.35);margin:8px 0}
-#bar button,#legs button,#rooms button{height:46px;padding:2px 2px 0;border-radius:16px;background:transparent;box-shadow:none;color:rgba(255,255,255,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:10.5px;font-weight:500;letter-spacing:.1px;text-shadow:0 1px 2px rgba(0,0,0,.35)}
-#bar button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 1px 1px rgba(0,0,0,.3))}
-#bar button.on,#legs button.on,#rooms button.on{background:rgba(120,200,160,.28);color:#d9ffe9}
-#bar .r{grid-column:5}
+#bar,#docsBar{position:fixed;z-index:60;left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));bottom:calc(var(--dock-b,18px) - var(--gap,0px));display:grid;grid-template-columns:repeat(3,1fr) 1px 1fr;gap:2px;padding:6px;border-radius:26px;background:rgba(255,255,255,.22);-webkit-backdrop-filter:blur(30px) saturate(200%);backdrop-filter:blur(30px) saturate(200%);border:.5px solid rgba(255,255,255,.45);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 10px 30px rgba(0,0,0,.28);max-width:520px;margin:0 auto}
+#bar .sep,#docsBar .sep{grid-column:4;grid-row:1 / span 2;background:rgba(255,255,255,.35);margin:8px 0}
+#bar button,#docsBar button,#legs button,#rooms button{height:46px;padding:2px 2px 0;border-radius:16px;background:transparent;box-shadow:none;color:rgba(255,255,255,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:10.5px;font-weight:500;letter-spacing:.1px;text-shadow:0 1px 2px rgba(0,0,0,.35)}
+#bar button svg,#docsBar button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 1px 1px rgba(0,0,0,.3))}
+#bar button.on,#docsBar button.on,#legs button.on,#rooms button.on{background:rgba(120,200,160,.28);color:#d9ffe9}
+#bar .r,#docsBar .r{grid-column:5}
 #legs,#rooms{position:fixed;z-index:61;left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));bottom:calc(var(--dock-b,18px) - var(--gap,0px) + 118px);display:none;grid-template-columns:repeat(2,1fr);gap:2px;padding:6px;border-radius:22px;background:rgba(255,255,255,.22);-webkit-backdrop-filter:blur(30px) saturate(200%);backdrop-filter:blur(30px) saturate(200%);border:.5px solid rgba(255,255,255,.45);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 10px 30px rgba(0,0,0,.28);max-width:520px;margin:0 auto}
 #rooms{grid-template-columns:repeat(3,1fr)}
 #legs.show,#rooms.show{display:grid}
@@ -55,9 +47,13 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-se
 <div id="c"></div>
 <div id="scrollfix" aria-hidden="true" style="height:calc(100vh + 1px);pointer-events:none"></div>
 <div id="info">
-<h3 style="margin-top:0">Есенина · версия 1.3.2</h3>
+<h3 style="margin-top:0">Есенина · версия 1.3.3</h3>
 <p id="diag" style="margin:0 0 6px;color:#777;font-size:12px"></p>
 <p style="margin:0 0 6px;color:#555">Нумерация: 1.x.0 — новый этап, 1.0.x — исправления внутри этапа.</p>
+<h3>1.3.3 · 17.11.2026 — исправления</h3>
+<ul>
+<li>Документы: меню внизу как основное — все 6 документов сразу, без прокрутки (иконка + подпись); справа «Модель» (назад к 3D) и листы «1 / 6» (тап — следующий лист, также листается свайпом)</li>
+</ul>
 <h3>1.3.2 · 17.11.2026 — исправления</h3>
 <ul>
 <li>Раздел «Документы» в едином стиле с основной страницей: тёмный фон, стеклянные вкладки, пояснение и листание</li>
@@ -142,23 +138,25 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-se
 </div>
 <div id="docs" aria-label="Документы">
 <div id="docView"><img id="docImg" alt="" draggable="false"></div>
-<div id="docsTop"><div id="docTabs"></div><button id="docsClose" aria-label="Закрыть">✕</button></div>
 <div id="docNote"></div>
-<div id="docPager"><button id="pgPrev" aria-label="Назад">‹</button><span id="pgNum"></span><button id="pgNext" aria-label="Дальше">›</button></div>
+<div id="docsBar"><div id="docTabs" style="display:contents"></div><div class="sep"></div>
+<button id="docsClose" class="r" style="grid-row:1" aria-label="Модель"><svg viewBox="0 0 24 24"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg><span>Модель</span></button>
+<button id="pgNext" class="r" style="grid-row:2" aria-label="Следующий лист"><svg viewBox="0 0 24 24"><path d="M8 4h9l3 3v13H8z"/><path d="M5 7v14h11"/></svg><span id="pgNum">1 / 1</span></button></div>
 </div>
 <script src="three.min.js"></script>
 <script src="OrbitControls.js"></script>
 <script>
-const APP_VERSION='1.3.2';
+const APP_VERSION='1.3.3';
 // ---------- ДОКУМЕНТЫ (2D) ----------
 // сюда добавляются новые документы: {t:'Название', src:'docs/файл.png'} — каждый станет вкладкой
+const DOC_IC={"plan": "<svg viewBox=\"0 0 24 24\"><rect x=\"4\" y=\"4\" width=\"16\" height=\"16\" rx=\"1.5\"/><path d=\"M4 11h8v9M12 4v4M16 11h4\"/></svg>", "before": "<svg viewBox=\"0 0 24 24\"><path d=\"M4 12a8 8 0 1 0 2.3-5.6L4 9\"/><path d=\"M4 4v5h5M12 8v4l3 2\"/></svg>", "walls": "<svg viewBox=\"0 0 24 24\"><path d=\"M3 6h18v12H3zM3 12h18M9 6v6M15 12v6M6 12v6M18 6v6M12 6v6\"/></svg>", "floor": "<svg viewBox=\"0 0 24 24\"><path d=\"M3 9l9-5 9 5-9 5z\"/><path d=\"M3 9v6l9 5 9-5V9\"/></svg>", "gas": "<svg viewBox=\"0 0 24 24\"><path d=\"M12 3c1 3 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3.5 2-4.5 0 2 1 3 2 3 0-3-1-5 1-8.5z\"/></svg>", "pass": "<svg viewBox=\"0 0 24 24\"><path d=\"M6 3h9l3 3v15H6z\"/><circle cx=\"12\" cy=\"13\" r=\"3\"/><path d=\"M9 18h6\"/></svg>"};
 const DOCS=[
- {t:'Стало',pages:['docs/plan-2d.png'],note:'Обмерный план «конечная» — по нему построена модель. Перегородка у прежнего места стиральной машины убрана.'},
- {t:'Было',pages:['docs/before.jpg'],note:'Замер изначальный — квартира до ремонта.'},
- {t:'Стены',pages:['docs/walls.jpg'],note:'Монтаж стен ПГП 75 — новые перегородки с размерами.'},
- {t:'Пол',pages:['docs/floor.jpg'],note:'Площадь пола 85,92 м² минус 2 колонны по 0,5 = 84,92 м².'},
- {t:'Газ',pages:['docs/gas-1.jpg','docs/gas-2.jpg','docs/gas-3.jpg','docs/gas-4.jpg','docs/gas-5.jpg','docs/gas-act.jpg'],note:'Проект переноса газопровода и установки счётчика (2019): 5 листов + акт обследования дымоходов. Трубы по проекту показаны на 3D жёлтым.',priv:1},
- {t:'Техпаспорт 2006',pages:['docs/tp-1.jpg','docs/tp-2.jpg','docs/tp-3.jpg','docs/tp-4.jpg','docs/tp-5.jpg','docs/tp-6.jpg'],note:'Архивный техпаспорт БТИ — для истории, размеры в нём неточные. Верный — обмерный план «Стало».',priv:1}
+ {t:'Стало',ic:'plan',pages:['docs/plan-2d.png'],note:'Обмерный план «конечная» — по нему построена модель. Перегородка у прежнего места стиральной машины убрана.'},
+ {t:'Было',ic:'before',pages:['docs/before.jpg'],note:'Замер изначальный — квартира до ремонта.'},
+ {t:'Стены',ic:'walls',pages:['docs/walls.jpg'],note:'Монтаж стен ПГП 75 — новые перегородки с размерами.'},
+ {t:'Пол',ic:'floor',pages:['docs/floor.jpg'],note:'Площадь пола 85,92 м² минус 2 колонны по 0,5 = 84,92 м².'},
+ {t:'Газ',ic:'gas',pages:['docs/gas-1.jpg','docs/gas-2.jpg','docs/gas-3.jpg','docs/gas-4.jpg','docs/gas-5.jpg','docs/gas-act.jpg'],note:'Проект переноса газопровода и установки счётчика (2019): 5 листов + акт обследования дымоходов. Трубы по проекту показаны на 3D жёлтым.',priv:1},
+ {t:'Паспорт',ic:'pass',pages:['docs/tp-1.jpg','docs/tp-2.jpg','docs/tp-3.jpg','docs/tp-4.jpg','docs/tp-5.jpg','docs/tp-6.jpg'],note:'Архивный техпаспорт БТИ — для истории, размеры в нём неточные. Верный — обмерный план «Стало».',priv:1}
 ];
 // автообновление: GitHub Pages кэширует страницу ~10 мин — проверяем version.json и перезагружаемся на новую версию
 function checkVersion(){if(location.protocol==='file:')return;fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{if(j&&j.v&&j.v!==APP_VERSION){location.replace(location.pathname+'?v='+encodeURIComponent(j.v));}}).catch(()=>{});}
@@ -639,14 +637,14 @@ addEventListener('resize',fitScreen);const onRes=()=>{camera.aspect=VW()/VH();ca
  let z={s:1,x:0,y:0},fit=1;const P=new Map();let tapT=0,moved=0;
  const apply=()=>{img.style.transform='translate('+z.x+'px,'+z.y+'px) scale('+z.s+')';};
  function fitDoc(){const w=img.naturalWidth,h=img.naturalHeight;if(!w)return;const vw=view.clientWidth,vh=view.clientHeight;
-  const top=note.offsetTop+note.offsetHeight+8,bot=pager.classList.contains('show')?70:20;fit=Math.min((vw-16)/w,(vh-top-bot)/h);z={s:fit,x:(vw-w*fit)/2,y:top+(vh-top-bot-h*fit)/2};apply();}
+  const top=note.offsetTop+note.offsetHeight+8,bot=130;fit=Math.min((vw-16)/w,(vh-top-bot)/h);z={s:fit,x:(vw-w*fit)/2,y:top+(vh-top-bot-h*fit)/2};apply();}
  function zoomAt(k,cx,cy){const ns=Math.min(fit*10,Math.max(fit*.8,z.s*k));k=ns/z.s;z.x=cx-(cx-z.x)*k;z.y=cy-(cy-z.y)*k;z.s=ns;apply();}
- let cur=0,pg=0;const note=document.getElementById('docNote'),pager=document.getElementById('docPager'),pgNum=document.getElementById('pgNum');
+ let cur=0,pg=0;const note=document.getElementById('docNote'),pgBtn=document.getElementById('pgNext'),pgNum=document.getElementById('pgNum');
  function show(){const d=DOCS[cur];pg=Math.max(0,Math.min(d.pages.length-1,pg));img.onload=fitDoc;img.src=d.pages[pg];if(img.complete&&img.naturalWidth)fitDoc();
-  note.textContent=d.note||'';pager.classList.toggle('show',d.pages.length>1);pgNum.textContent=(pg+1)+' / '+d.pages.length;}
+  note.textContent=d.note||'';pgBtn.style.opacity=d.pages.length>1?1:.4;pgNum.textContent=(pg+1)+' / '+d.pages.length;}
  function open(i){cur=i;pg=0;tabs.querySelectorAll('button').forEach((b,j)=>b.classList.toggle('on',j===i));show();}
- document.getElementById('pgPrev').onclick=()=>{pg--;show();};document.getElementById('pgNext').onclick=()=>{pg++;show();};
- DOCS.forEach((d,i)=>{const b=document.createElement('button');b.textContent=d.t;b.onclick=()=>open(i);tabs.appendChild(b);});
+ pgBtn.onclick=()=>{const n=DOCS[cur].pages.length;if(n>1){pg=(pg+1)%n;show();}};
+ DOCS.forEach((d,i)=>{const b=document.createElement('button');b.style.gridColumn=(i%3)+1;b.style.gridRow=Math.floor(i/3)+1;b.innerHTML=(DOC_IC[d.ic]||'')+'<span>'+d.t+'</span>';b.onclick=()=>open(i);tabs.appendChild(b);});
  document.getElementById('bDocs').onclick=()=>{box.classList.add('show');document.getElementById('bDocs').classList.add('on');open(0);};
  document.getElementById('docsClose').onclick=()=>{box.classList.remove('show');document.getElementById('bDocs').classList.remove('on');};
  view.addEventListener('pointerdown',e=>{view.setPointerCapture(e.pointerId);P.set(e.pointerId,{x:e.clientX,y:e.clientY});moved=0;});
@@ -655,7 +653,8 @@ addEventListener('resize',fitScreen);const onRes=()=>{camera.aspect=VW()/VH();ca
   else if(P.size===2){let o;for(const [k,v] of P)if(k!==e.pointerId)o=v;const d0=Math.hypot(pr.x-o.x,pr.y-o.y),d1=Math.hypot(cu.x-o.x,cu.y-o.y);
    const m0={x:(pr.x+o.x)/2,y:(pr.y+o.y)/2},m1={x:(cu.x+o.x)/2,y:(cu.y+o.y)/2};if(d0>0)zoomAt(d1/d0,m0.x,m0.y);z.x+=m1.x-m0.x;z.y+=m1.y-m0.y;apply();}
   moved+=Math.abs(cu.x-pr.x)+Math.abs(cu.y-pr.y);P.set(e.pointerId,cu);});
- const up=e=>{if(!P.has(e.pointerId))return;P.delete(e.pointerId);if(P.size===0&&moved<8){const t=Date.now();if(t-tapT<300){if(z.s>fit*1.5)fitDoc();else zoomAt(3,e.clientX,e.clientY);tapT=0;}else tapT=t;}};
+ let sx=0;view.addEventListener('pointerdown',e=>{if(P.size===1)sx=e.clientX;});
+ const up=e=>{if(!P.has(e.pointerId))return;P.delete(e.pointerId);const n=DOCS[cur].pages.length;if(P.size===0&&n>1&&z.s<=fit*1.05&&Math.abs(e.clientX-sx)>70){pg=(pg+(e.clientX<sx?1:-1)+n)%n;show();return;}if(P.size===0&&moved<8){const t=Date.now();if(t-tapT<300){if(z.s>fit*1.5)fitDoc();else zoomAt(3,e.clientX,e.clientY);tapT=0;}else tapT=t;}};
  view.addEventListener('pointerup',up);view.addEventListener('pointercancel',up);
  view.addEventListener('wheel',e=>{e.preventDefault();zoomAt(e.deltaY<0?1.15:1/1.15,e.clientX,e.clientY);},{passive:false});
  addEventListener('resize',()=>{if(box.classList.contains('show'))fitDoc();});
