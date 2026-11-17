@@ -18,8 +18,19 @@ html{min-height:100%;overscroll-behavior:none;background:#2a2b30}
 body{margin:0;min-height:calc(100% + 1px);overscroll-behavior:none;background:#2a2b30;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color:#222}
 #c{position:fixed;top:0;left:0;right:0;height:var(--H,100%);touch-action:none}
 #top{position:fixed;top:0;left:0;right:0;padding:calc(env(safe-area-inset-top) + 8px) 12px 6px;pointer-events:none}
-#bar #bInfo{grid-column:4;grid-row:1 / span 2;align-self:center;justify-self:center;width:34px;height:34px;padding:0;border-radius:17px;font-size:17px;font-weight:700;background:rgba(255,255,255,.7);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+#bar #bInfo,#bar #bDocs{grid-column:4;align-self:center;justify-self:center;width:34px;height:34px;padding:0;border-radius:17px;font-weight:700;background:rgba(255,255,255,.7);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+#bar #bDocs{grid-row:1;font-size:12px}
+#bar #bInfo{grid-row:2;font-size:17px}
 #bar #bInfo.on{background:#2f5d45;color:#fff}
+#docs{position:fixed;left:0;right:0;top:0;height:var(--H,100%);z-index:90;background:#f4f3ef;display:none;touch-action:none}
+#docs.show{display:block}
+#docsTop{position:absolute;left:0;right:0;top:0;padding:calc(10px + env(safe-area-inset-top,0px)) 12px 8px;display:flex;gap:6px;align-items:center;z-index:2}
+#docTabs{display:flex;gap:6px;overflow-x:auto;flex:1;scrollbar-width:none}
+#docTabs button,#docsClose{flex:none;height:34px;padding:0 14px;border-radius:17px;background:rgba(255,255,255,.8);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);border:.5px solid rgba(0,0,0,.08);box-shadow:0 2px 10px rgba(0,0,0,.12);font-size:13px;font-weight:500;color:#1d2a22}
+#docTabs button.on{background:#2f5d45;color:#fff}
+#docsClose{width:34px;padding:0;font-size:15px}
+#docView{position:absolute;inset:0;overflow:hidden;touch-action:none}
+#docImg{position:absolute;left:0;top:0;transform-origin:0 0;max-width:none;user-select:none;-webkit-user-select:none;-webkit-user-drag:none;pointer-events:none}
 #top h1{margin:0;font-size:16px;font-weight:600;background:rgba(255,255,255,.85);display:inline-block;padding:6px 10px;border-radius:10px;pointer-events:auto}
 button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;font:inherit;border:0;cursor:pointer}
 #bar{position:fixed;z-index:60;left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));bottom:calc(var(--dock-b,18px) - var(--gap,0px));display:grid;grid-template-columns:repeat(3,1fr) 42px;gap:4px;padding:5px;border-radius:24px;background:rgba(255,255,255,.55);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);border:.5px solid rgba(255,255,255,.7);box-shadow:0 8px 28px rgba(0,0,0,.14);max-width:520px;margin:0 auto}
@@ -37,9 +48,14 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-se
 <div id="c"></div>
 <div id="scrollfix" aria-hidden="true" style="height:calc(100vh + 1px);pointer-events:none"></div>
 <div id="info">
-<h3 style="margin-top:0">Есенина · версия 1.0.3</h3>
+<h3 style="margin-top:0">Есенина · версия 1.1.0</h3>
 <p id="diag" style="margin:0 0 6px;color:#777;font-size:12px"></p>
 <p style="margin:0 0 6px;color:#555">Нумерация: 1.x.0 — новый этап, 1.0.x — исправления внутри этапа.</p>
+<h3>1.1.0 · 17.11.2026 — этап 2: документы</h3>
+<ul>
+<li>Кнопка «2D» в меню — раздел документов: обмерный план квартиры (без убранной перегородки у стиральной машины), приближение двумя пальцами, двойной тап — крупно/целиком</li>
+<li>Сюда же вкладками будут добавляться проект кухни, проект газа и другие документы</li>
+</ul>
 <h3>1.0.3 · 17.11.2026 — исправления</h3>
 <ul>
 <li>Полный экран с иконки: убрана полоса снизу — страница прокручиваемая (как в навыке), режим «с иконки» определяется надёжнее</li>
@@ -87,6 +103,7 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-se
 <button id="b3d">3D</button>
 <button id="bLbl" class="on">Подписи</button>
 <button id="bLegs">Опоры</button>
+<button id="bDocs" aria-label="Документы, 2D-план">2D</button>
 <button id="bInfo" aria-label="Справка">!</button>
 </div>
 <div id="legs">
@@ -95,10 +112,17 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-se
 <button data-v="2">Х-опоры сосна</button>
 <button data-v="3">2 ножки + к стене</button>
 </div>
+<div id="docs" aria-label="Документы">
+<div id="docView"><img id="docImg" alt="" draggable="false"></div>
+<div id="docsTop"><div id="docTabs"></div><button id="docsClose" aria-label="Закрыть">✕</button></div>
+</div>
 <script src="three.min.js"></script>
 <script src="OrbitControls.js"></script>
 <script>
-const APP_VERSION='1.0.3';
+const APP_VERSION='1.1.0';
+// ---------- ДОКУМЕНТЫ (2D) ----------
+// сюда добавляются новые документы: {t:'Название', src:'docs/файл.png'} — каждый станет вкладкой
+const DOCS=[{t:'План (обмерный)',src:'docs/plan-2d.png'}];
 // автообновление: GitHub Pages кэширует страницу ~10 мин — проверяем version.json и перезагружаемся на новую версию
 function checkVersion(){if(location.protocol==='file:')return;fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{if(j&&j.v&&j.v!==APP_VERSION){location.replace(location.pathname+'?v='+encodeURIComponent(j.v));}}).catch(()=>{});}
 checkVersion();document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkVersion();});
@@ -512,6 +536,28 @@ document.getElementById('bLegs').onclick=e=>{const l=document.getElementById('le
  if(l.classList.contains('show')){camera.position.set(3.4,3.3,11.2);controls.target.set(1.95,0.45,9.67);controls.update();}};
 document.querySelectorAll('#legs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#legs button').forEach(x=>x.classList.remove('on'));b.classList.add('on');setLegs(+b.dataset.v);});
 addEventListener('resize',fitScreen);const onRes=()=>{camera.aspect=VW()/VH();camera.updateProjectionMatrix();renderer.setSize(VW(),VH());};addEventListener('resize',onRes);addEventListener('orientationchange',()=>setTimeout(onRes,300));document.addEventListener('visibilitychange',()=>setTimeout(onRes,200));
+(function(){
+ const box=document.getElementById('docs'),view=document.getElementById('docView'),img=document.getElementById('docImg'),tabs=document.getElementById('docTabs');
+ let z={s:1,x:0,y:0},fit=1;const P=new Map();let tapT=0,moved=0;
+ const apply=()=>{img.style.transform='translate('+z.x+'px,'+z.y+'px) scale('+z.s+')';};
+ function fitDoc(){const w=img.naturalWidth,h=img.naturalHeight;if(!w)return;const vw=view.clientWidth,vh=view.clientHeight,top=70,bot=20;
+  fit=Math.min((vw-16)/w,(vh-top-bot)/h);z={s:fit,x:(vw-w*fit)/2,y:top+(vh-top-bot-h*fit)/2};apply();}
+ function zoomAt(k,cx,cy){const ns=Math.min(fit*10,Math.max(fit*.8,z.s*k));k=ns/z.s;z.x=cx-(cx-z.x)*k;z.y=cy-(cy-z.y)*k;z.s=ns;apply();}
+ function open(i){tabs.querySelectorAll('button').forEach((b,j)=>b.classList.toggle('on',j===i));img.onload=fitDoc;img.src=DOCS[i].src;if(img.complete&&img.naturalWidth)fitDoc();}
+ DOCS.forEach((d,i)=>{const b=document.createElement('button');b.textContent=d.t;b.onclick=()=>open(i);tabs.appendChild(b);});
+ document.getElementById('bDocs').onclick=()=>{box.classList.add('show');document.getElementById('bDocs').classList.add('on');open(0);};
+ document.getElementById('docsClose').onclick=()=>{box.classList.remove('show');document.getElementById('bDocs').classList.remove('on');};
+ view.addEventListener('pointerdown',e=>{view.setPointerCapture(e.pointerId);P.set(e.pointerId,{x:e.clientX,y:e.clientY});moved=0;});
+ view.addEventListener('pointermove',e=>{const pr=P.get(e.pointerId);if(!pr)return;const cu={x:e.clientX,y:e.clientY};
+  if(P.size===1){z.x+=cu.x-pr.x;z.y+=cu.y-pr.y;apply();}
+  else if(P.size===2){let o;for(const [k,v] of P)if(k!==e.pointerId)o=v;const d0=Math.hypot(pr.x-o.x,pr.y-o.y),d1=Math.hypot(cu.x-o.x,cu.y-o.y);
+   const m0={x:(pr.x+o.x)/2,y:(pr.y+o.y)/2},m1={x:(cu.x+o.x)/2,y:(cu.y+o.y)/2};if(d0>0)zoomAt(d1/d0,m0.x,m0.y);z.x+=m1.x-m0.x;z.y+=m1.y-m0.y;apply();}
+  moved+=Math.abs(cu.x-pr.x)+Math.abs(cu.y-pr.y);P.set(e.pointerId,cu);});
+ const up=e=>{if(!P.has(e.pointerId))return;P.delete(e.pointerId);if(P.size===0&&moved<8){const t=Date.now();if(t-tapT<300){if(z.s>fit*1.5)fitDoc();else zoomAt(3,e.clientX,e.clientY);tapT=0;}else tapT=t;}};
+ view.addEventListener('pointerup',up);view.addEventListener('pointercancel',up);
+ view.addEventListener('wheel',e=>{e.preventDefault();zoomAt(e.deltaY<0?1.15:1/1.15,e.clientX,e.clientY);},{passive:false});
+ addEventListener('resize',()=>{if(box.classList.contains('show'))fitDoc();});
+})();
 (function loop(){requestAnimationFrame(loop);controls.update();renderer.render(scene,camera);})();
 </script>
 </body>
