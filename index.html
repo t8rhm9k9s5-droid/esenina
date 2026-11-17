@@ -18,20 +18,20 @@ html{min-height:100%;overscroll-behavior:none;background:#2a2b30}
 body{margin:0;min-height:calc(100% + 1px);overscroll-behavior:none;background:#2a2b30;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color:#222}
 #c{position:fixed;top:0;left:0;right:0;height:var(--H,100%);touch-action:none}
 #top{position:fixed;top:0;left:0;right:0;padding:calc(env(safe-area-inset-top) + 8px) 12px 6px;pointer-events:none}
-#docs{position:fixed;left:0;right:0;top:0;height:var(--H,100%);z-index:90;background:#f4f3ef;display:none;touch-action:none}
+#docs{position:fixed;left:0;right:0;top:0;height:var(--H,100%);z-index:90;background:#2a2b30;display:none;touch-action:none}
 #docs.show{display:block}
 #docsTop{position:absolute;left:0;right:0;top:0;padding:calc(10px + env(safe-area-inset-top,0px)) 12px 8px;display:flex;gap:6px;align-items:center;z-index:2}
-#docTabs{display:flex;gap:6px;overflow-x:auto;flex:1;scrollbar-width:none}
-#docTabs button,#docsClose{flex:none;height:34px;padding:0 14px;border-radius:17px;background:rgba(255,255,255,.8);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);border:.5px solid rgba(0,0,0,.08);box-shadow:0 2px 10px rgba(0,0,0,.12);font-size:13px;font-weight:500;color:#1d2a22}
-#docTabs button.on{background:#2f5d45;color:#fff}
-#docsClose{width:34px;padding:0;font-size:15px}
+#docTabs{display:flex;gap:2px;overflow-x:auto;flex:1;scrollbar-width:none;padding:5px;border-radius:24px;background:rgba(255,255,255,.22);-webkit-backdrop-filter:blur(30px) saturate(200%);backdrop-filter:blur(30px) saturate(200%);border:.5px solid rgba(255,255,255,.45);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 10px 30px rgba(0,0,0,.28)}
+#docTabs button{flex:none;height:34px;padding:0 13px;border-radius:17px;background:transparent;font-size:13px;font-weight:500;color:rgba(255,255,255,.92);text-shadow:0 1px 2px rgba(0,0,0,.35)}
+#docsClose{flex:none;width:44px;height:44px;padding:0;border-radius:22px;font-size:16px;color:#fff;background:rgba(255,255,255,.22);-webkit-backdrop-filter:blur(30px) saturate(200%);backdrop-filter:blur(30px) saturate(200%);border:.5px solid rgba(255,255,255,.45);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 10px 30px rgba(0,0,0,.28)}
+#docTabs button.on{background:rgba(120,200,160,.28);color:#d9ffe9}
 #docView{position:absolute;inset:0;overflow:hidden;touch-action:none}
-#docNote{position:absolute;left:12px;right:12px;top:calc(56px + env(safe-area-inset-top,0px));z-index:2;font-size:12px;line-height:1.35;color:#3b4a40;background:rgba(255,255,255,.75);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border-radius:12px;padding:6px 10px}
-#docPager{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(var(--dock-b,18px) - var(--gap,0px));z-index:2;display:none;align-items:center;gap:10px;padding:4px;border-radius:22px;background:rgba(255,255,255,.8);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);box-shadow:0 4px 16px rgba(0,0,0,.15)}
+#docNote{position:absolute;left:12px;right:12px;top:calc(66px + env(safe-area-inset-top,0px));z-index:2;font-size:12px;line-height:1.35;color:rgba(255,255,255,.88);border-radius:16px;padding:7px 12px;background:rgba(255,255,255,.22);-webkit-backdrop-filter:blur(30px) saturate(200%);backdrop-filter:blur(30px) saturate(200%);border:.5px solid rgba(255,255,255,.45);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 10px 30px rgba(0,0,0,.28)}
+#docPager{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(var(--dock-b,18px) - var(--gap,0px));z-index:2;display:none;align-items:center;gap:6px;padding:4px;border-radius:24px;background:rgba(255,255,255,.22);-webkit-backdrop-filter:blur(30px) saturate(200%);backdrop-filter:blur(30px) saturate(200%);border:.5px solid rgba(255,255,255,.45);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 10px 30px rgba(0,0,0,.28)}
 #docPager.show{display:flex}
-#docPager button{width:40px;height:36px;border-radius:18px;background:transparent;font-size:22px;color:#1d2a22}
-#pgNum{font-size:13px;font-weight:600;color:#1d2a22;min-width:44px;text-align:center}
-#docImg{position:absolute;left:0;top:0;transform-origin:0 0;max-width:none;user-select:none;-webkit-user-select:none;-webkit-user-drag:none;pointer-events:none}
+#docPager button{width:44px;height:38px;border-radius:19px;background:transparent;font-size:24px;color:#fff}
+#pgNum{font-size:13px;font-weight:600;color:#fff;min-width:48px;text-align:center}
+#docImg{position:absolute;left:0;top:0;transform-origin:0 0;box-shadow:0 10px 40px rgba(0,0,0,.45);border-radius:4px;max-width:none;user-select:none;-webkit-user-select:none;-webkit-user-drag:none;pointer-events:none}
 #top h1{margin:0;font-size:16px;font-weight:600;background:rgba(255,255,255,.85);display:inline-block;padding:6px 10px;border-radius:10px;pointer-events:auto}
 /*dock*/
 #bar{position:fixed;z-index:60;left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));bottom:calc(var(--dock-b,18px) - var(--gap,0px));display:grid;grid-template-columns:repeat(3,1fr) 1px 1fr;gap:2px;padding:6px;border-radius:26px;background:rgba(255,255,255,.22);-webkit-backdrop-filter:blur(30px) saturate(200%);backdrop-filter:blur(30px) saturate(200%);border:.5px solid rgba(255,255,255,.45);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 10px 30px rgba(0,0,0,.28);max-width:520px;margin:0 auto}
@@ -55,9 +55,13 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-se
 <div id="c"></div>
 <div id="scrollfix" aria-hidden="true" style="height:calc(100vh + 1px);pointer-events:none"></div>
 <div id="info">
-<h3 style="margin-top:0">Есенина · версия 1.3.1</h3>
+<h3 style="margin-top:0">Есенина · версия 1.3.2</h3>
 <p id="diag" style="margin:0 0 6px;color:#777;font-size:12px"></p>
 <p style="margin:0 0 6px;color:#555">Нумерация: 1.x.0 — новый этап, 1.0.x — исправления внутри этапа.</p>
+<h3>1.3.2 · 17.11.2026 — исправления</h3>
+<ul>
+<li>Раздел «Документы» в едином стиле с основной страницей: тёмный фон, стеклянные вкладки, пояснение и листание</li>
+</ul>
 <h3>1.3.1 · 17.11.2026 — исправления</h3>
 <ul>
 <li>Проект газа, акт дымоходов и техпаспорт 2006 выложены и на открытый сайт</li>
@@ -145,7 +149,7 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-se
 <script src="three.min.js"></script>
 <script src="OrbitControls.js"></script>
 <script>
-const APP_VERSION='1.3.1';
+const APP_VERSION='1.3.2';
 // ---------- ДОКУМЕНТЫ (2D) ----------
 // сюда добавляются новые документы: {t:'Название', src:'docs/файл.png'} — каждый станет вкладкой
 const DOCS=[
