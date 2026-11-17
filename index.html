@@ -149,6 +149,8 @@ const DOCS=[
  {t:'Было',pages:['docs/before.jpg'],note:'Замер изначальный — квартира до ремонта.'},
  {t:'Стены',pages:['docs/walls.jpg'],note:'Монтаж стен ПГП 75 — новые перегородки с размерами.'},
  {t:'Пол',pages:['docs/floor.jpg'],note:'Площадь пола 85,92 м² минус 2 колонны по 0,5 = 84,92 м².'},
+ {t:'Газ',pages:['docs/gas-1.jpg','docs/gas-2.jpg','docs/gas-3.jpg','docs/gas-4.jpg','docs/gas-5.jpg','docs/gas-act.jpg'],note:'Проект переноса газопровода и установки счётчика (2019): 5 листов + акт обследования дымоходов. Трубы по проекту показаны на 3D жёлтым.',priv:1},
+ {t:'Техпаспорт 2006',pages:['docs/tp-1.jpg','docs/tp-2.jpg','docs/tp-3.jpg','docs/tp-4.jpg','docs/tp-5.jpg','docs/tp-6.jpg'],note:'Архивный техпаспорт БТИ — для истории, размеры в нём неточные. Верный — обмерный план «Стало».',priv:1}
 ];
 // автообновление: GitHub Pages кэширует страницу ~10 мин — проверяем version.json и перезагружаемся на новую версию
 function checkVersion(){if(location.protocol==='file:')return;fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{if(j&&j.v&&j.v!==APP_VERSION){location.replace(location.pathname+'?v='+encodeURIComponent(j.v));}}).catch(()=>{});}
