@@ -22,6 +22,7 @@
 "icon-512.png",
 "index.html",
 "manifest.webmanifest",
+"sw.js",
 "three.min.js",
 "version.json"
 ]

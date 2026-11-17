@@ -47,9 +47,14 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-se
 <div id="c"></div>
 <div id="scrollfix" aria-hidden="true" style="height:calc(100vh + 1px);pointer-events:none"></div>
 <div id="info">
-<h3 style="margin-top:0">Есенина · версия 1.3.4</h3>
+<h3 style="margin-top:0">Есенина · версия 1.3.5</h3>
 <p id="diag" style="margin:0 0 6px;color:#777;font-size:12px"></p>
 <p style="margin:0 0 6px;color:#555">Нумерация: 1.x.0 — новый этап, 1.0.x — исправления внутри этапа.</p>
+<h3>1.3.5 · 17.11.2026 — исправления</h3>
+<ul>
+<li>Приложение с экрана «Домой» сразу сохраняет модель и все документы (все листы) — открываются без интернета и без ожидания; в «Справке» видно, сколько документов сохранено</li>
+<li>Закрытая копия сайта на Firebase по личной ссылке</li>
+</ul>
 <h3>1.3.4 · 17.11.2026 — исправления</h3>
 <ul>
 <li>Документы → «Паспорт»: первым листом — сверка техпаспорта 2006 с фактическим замером (разница по каждому помещению, цветом на плане)</li>
@@ -150,7 +155,7 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-se
 <script src="three.min.js"></script>
 <script src="OrbitControls.js"></script>
 <script>
-const APP_VERSION='1.3.4';
+const APP_VERSION='1.3.5';
 // ---------- ДОКУМЕНТЫ (2D) ----------
 // сюда добавляются новые документы: {t:'Название', src:'docs/файл.png'} — каждый станет вкладкой
 const DOC_IC={"plan": "<svg viewBox=\"0 0 24 24\"><rect x=\"4\" y=\"4\" width=\"16\" height=\"16\" rx=\"1.5\"/><path d=\"M4 11h8v9M12 4v4M16 11h4\"/></svg>", "before": "<svg viewBox=\"0 0 24 24\"><path d=\"M4 12a8 8 0 1 0 2.3-5.6L4 9\"/><path d=\"M4 4v5h5M12 8v4l3 2\"/></svg>", "walls": "<svg viewBox=\"0 0 24 24\"><path d=\"M3 6h18v12H3zM3 12h18M9 6v6M15 12v6M6 12v6M18 6v6M12 6v6\"/></svg>", "floor": "<svg viewBox=\"0 0 24 24\"><path d=\"M3 9l9-5 9 5-9 5z\"/><path d=\"M3 9v6l9 5 9-5V9\"/></svg>", "gas": "<svg viewBox=\"0 0 24 24\"><path d=\"M12 3c1 3 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3.5 2-4.5 0 2 1 3 2 3 0-3-1-5 1-8.5z\"/></svg>", "pass": "<svg viewBox=\"0 0 24 24\"><path d=\"M6 3h9l3 3v15H6z\"/><circle cx=\"12\" cy=\"13\" r=\"3\"/><path d=\"M9 18h6\"/></svg>"};
@@ -165,6 +170,9 @@ const DOCS=[
 // автообновление: GitHub Pages кэширует страницу ~10 мин — проверяем version.json и перезагружаемся на новую версию
 function checkVersion(){if(location.protocol==='file:')return;fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{if(j&&j.v&&j.v!==APP_VERSION){location.replace(location.pathname+'?v='+encodeURIComponent(j.v));}}).catch(()=>{});}
 checkVersion();document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkVersion();});
+// офлайн: сайт и все документы сохраняются в приложении (Service Worker)
+if('serviceWorker' in navigator&&/(\.web\.app|\.github\.io)$/.test(location.hostname))navigator.serviceWorker.register('sw.js').catch(()=>{});
+function offlineInfo(cb){if(!window.caches)return cb('');caches.keys().then(ks=>{const k=ks.find(x=>x==='esenina-'+APP_VERSION);if(!k)return cb(' · офлайн: сохраняется…');caches.open(k).then(c=>c.keys()).then(a=>{const n=a.filter(q=>/\/docs\//.test(q.url)).length;cb(' · офлайн: сохранено, документов '+n+' из '+DOCS.reduce((t,d)=>t+d.pages.length,0));});}).catch(()=>cb(''));}
 const H=3100, CUT=1150;
 const wrap=document.getElementById('c');
 function fitScreen(){const app=navigator.standalone===true||!matchMedia('(display-mode: browser)').matches;
@@ -631,7 +639,7 @@ $('bTop').onclick=()=>{closePops();setMode('top');};
 $('bRooms').onclick=()=>{closePops('rooms');$('rooms').classList.toggle('show');$('bRooms').classList.toggle('on',$('rooms').classList.contains('show'));};
 $('bCut').onclick=()=>{cut=!cut;applyCut();if(!cut&&mode==='3d')camTo(CX-7,9,CZ+9.5,CX,1.5,CZ);};
 $('bLbl').onclick=e=>{labels.visible=!labels.visible;e.currentTarget.classList.toggle('on',labels.visible);};
-$('bInfo').onclick=e=>{closePops('info');const d=$('diag');if(d)d.textContent='Экран '+screen.height+' · окно '+innerHeight+' · модель '+VH()+' · режим '+((navigator.standalone===true||!matchMedia('(display-mode: browser)').matches)?'иконка':'браузер');const i=$('info');i.classList.toggle('show');e.currentTarget.classList.toggle('on',i.classList.contains('show'));};
+$('bInfo').onclick=e=>{closePops('info');const d=$('diag');if(d)d.textContent='Экран '+screen.height+' · окно '+innerHeight+' · модель '+VH()+' · режим '+((navigator.standalone===true||!matchMedia('(display-mode: browser)').matches)?'иконка':'браузер');if(d)offlineInfo(t=>{d.textContent+=t;});const i=$('info');i.classList.toggle('show');e.currentTarget.classList.toggle('on',i.classList.contains('show'));};
 $('bLegs').onclick=e=>{closePops('legs');const l=$('legs');l.classList.toggle('show');e.currentTarget.classList.toggle('on',l.classList.contains('show'));
  if(l.classList.contains('show')){mode='3d';dims.visible=false;roomDims.forEach(s=>s.visible=false);camTo(3.4,3.3,11.2,1.95,0.45,9.67);}};
 document.querySelectorAll('#legs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#legs button').forEach(x=>x.classList.remove('on'));b.classList.add('on');setLegs(+b.dataset.v);});
