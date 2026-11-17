@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Есенина">
+<meta name="theme-color" content="#1f4a35">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Есенина — 3D-модель квартиры</title>
+<style>
+:root{--dock-b:max(18px,calc(env(safe-area-inset-bottom,0px) - 16px))}
+html{min-height:100%;overscroll-behavior:none}
+body{margin:0;min-height:100%;overscroll-behavior:none;background:#e9e7e2;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color:#222}
+#c{position:fixed;inset:0;touch-action:none}
+#top{position:fixed;top:0;left:0;right:0;padding:calc(10px + env(safe-area-inset-top,0px)) 12px 6px;pointer-events:none;background:transparent}
+#top h1{margin:0;font-size:16px;font-weight:600;background:rgba(255,255,255,.85);display:inline-block;padding:6px 10px;border-radius:10px;pointer-events:auto}
+#bar{position:fixed;left:0;right:0;bottom:0;padding:8px 8px var(--dock-b);display:flex;flex-wrap:wrap;gap:6px;justify-content:center;background:linear-gradient(transparent,rgba(233,231,226,.95) 30%)}
+button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;font:inherit;font-size:13px;border:0;border-radius:18px;padding:8px 12px;background:#fff;color:#222;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+button.on{background:#2f5d45;color:#fff}
+#legs{display:none;gap:6px;flex-wrap:wrap;justify-content:center;width:100%}
+#legs.show{display:flex}
+#info{position:fixed;top:calc(env(safe-area-inset-top) + 48px);right:10px;left:10px;max-width:420px;margin-left:auto;max-height:60vh;overflow:auto;background:rgba(255,255,255,.96);border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.4;display:none;box-shadow:0 4px 18px rgba(0,0,0,.2)}
+#info.show{display:block}
+#info h3{margin:8px 0 4px;font-size:14px}
+#info ul{margin:0;padding-left:18px}
+</style>
+</head>
+<body>
+<div id="c"></div>
+<div id="top"><h1>Есенина · как сейчас</h1></div>
+<div id="info">
+<h3>Сделано (в модели)</h3>
+<ul>
+<li>Кухня по плану, без холодильника (место под него около 1,2 м); верхние шкафы только над газовой колонкой — двухъярусные, в нишу до потолка; отопление центральное; фасады голубые, столешница сосна, фартук — белый кабанчик на 1 м от столешницы (кроме места холодильника), вытяжка-зонт, духовой шкаф под варочной панелью; пенала нет; от последней тумбы до стены около 1,2 м — место под холодильник</li>
+<li>Стол на кухне 1200×700, столешница сосна, опоры — П-образные чёрный металл (остальные варианты на кнопке «Опоры стола»)</li>
+<li>Кабинет: одна дверь со стороны гостиной под левой балкой, за ней маленький коридорчик (ламинат) и проём в кабинет без двери</li>
+<li>Санузел: дверь со стороны кухни; стиральная машина в нише под левой колонной — справа от двери, как заходишь; перегородки у бывшего места стиралки нет; короб инсталляции до потолка; унитаз (в инсталляции) и раковина поменяны местами, перегородки у стиральной машины нет; умывальник 1100 — накладная керамическая раковина, столешница и полка для полотенец из массива бука на белых опорах; зеркало врезано в плитку до потолка, над ним 2 поворотных спота (плюс 4 обычных спота в санузле); белая плитка 20×20 шахматкой</li>
+<li>Встроенные шкафы в коридоре справа от входа и в спальне — до потолка, фасады белые крашеные МДФ</li>
+<li>Гардеробная полностью</li>
+<li>Пол — плитка 60×60 серая под бетон, по диагонали везде, кроме спален; в спальнях ламинат «дуб светлый» в тон дверям</li>
+<li>Окна: подоконник 900, в плоскости стены (усилен изнутри); радиаторы в нишах под подоконниками, вровень со стеной — нигде ничего не выступает; шторы в нише натяжного потолка (скрытый карниз)</li>
+<li>Две опорные балки (ригели) ~300 через всю квартиру по колоннам: левая спрятана в перегородке кабинета с небольшим выступом в кабинет, правая — через гостиную и столовую</li>
+<li>Ниши под шторы — во всю длину стены с окном в кабинете, гостиной, спальне и на кухне</li>
+<li>Кондиционеры: в кабинете слева от окна, в спальне справа; поток параллельно окну</li>
+<li>Гостиная: диван 3000×1000 по плану, зелёный велюр, каре на стяжке</li>
+<li>Свет: гостиная — 2 люстры по оси, в центрах половин длины от окна до стены у буфета (спотов нет); спальня и кабинет — по люстре центр-центр; кухня — 8 спотов в 2 ряда по 4 (над столешницей и над столом, в центрах половин ширины, по длине в центрах четвертей); вход — 4 спота по центру коридора; санузел — 4 спота квадратом по оси ниши ванны; 2 бра вверх-вниз у входа в гардеробную</li>
+<li>Унитаз в инсталляции</li>
+<li>Двери Волховец, полотно 2300, сосна; в комнатах стены белые, в остальной квартире матовые серые; потолок 3100</li>
+
+</ul>
+<h3>Допущения — поправьте, если не так</h3>
+<ul>
+<li>Окна 1800 высотой (подоконник 900 → верх 2700)</li>
+<li>Белые стены — в кабинете, спальне и гостиной до границы со столовой</li>
+<li>Балки опущены от потолка на 350</li>
+<li>Верхних шкафов на кухне нет</li>
+<li>Мебель, о которой не сказано (кабинет, спальня, буфет, стеллаж под правой колонной), стоит по плану в нейтральных цветах</li>
+</ul>
+</div>
+<div id="bar">
+<button id="bCut" class="on">Обзор (срез)</button>
+<button id="bFull">Стены во всю высоту</button>
+<button id="bTop">Вид сверху</button>
+<button id="b3d">3D-вид</button>
+<button id="bNight">Вечер</button>
+<button id="bLbl" class="on">Подписи</button>
+<button id="bLegs">Опоры стола</button>
+<button id="bInfo">Что учтено</button>
+<div id="legs">
+<button data-v="1" class="on">П-опоры металл ✓</button>
+<button data-v="0">4 ножки сосна</button>
+<button data-v="2">Х-опоры сосна</button>
+<button data-v="3">2 ножки + к стене</button>
+</div>
+</div>
+<script src="three.min.js"></script>
+<script src="OrbitControls.js"></script>
+<script>
+const H=3100, CUT=1150;
+const wrap=document.getElementById('c');
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+const VW=()=>wrap.clientWidth||innerWidth, VH=()=>wrap.clientHeight||innerHeight;
+renderer.setSize(VW(),VH());
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+renderer.outputEncoding=THREE.sRGBEncoding;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;
+renderer.localClippingEnabled=true;
+wrap.appendChild(renderer.domElement);
+const scene=new THREE.Scene();scene.background=new THREE.Color(0xe9e7e2);
+const camera=new THREE.PerspectiveCamera(45,VW()/VH(),0.05,200);
+const controls=new THREE.OrbitControls(camera,renderer.domElement);
+controls.enableDamping=true;controls.maxPolarAngle=Math.PI*0.495;
+const CX=4.9,CZ=5.6;
+controls.target.set(CX,0.6,CZ);
+
+// clipping for "срез"
+const clipPlane=new THREE.Plane(new THREE.Vector3(0,-1,0),CUT/1000);
+const clipList=[];
+function M(color,o={}){const c=o.clip;delete o.clip;const m=new THREE.MeshStandardMaterial(Object.assign({color,roughness:0.85,metalness:0},o));if(c)clipList.push(m);return m;}
+function CM(color,o={}){o.clip=true;return M(color,o);}
+// ---- textures ----
+function texCanvas(kind){const c=document.createElement('canvas');c.width=c.height=256;const g=c.getContext('2d');
+ if(kind==='chess'){ // 2x2 tiles 200x200, white chess (matte/gloss)
+  for(let i=0;i<2;i++)for(let j=0;j<2;j++){g.fillStyle=(i+j)%2?'#eeeeea':'#fbfbf9';g.fillRect(i*128,j*128,128,128);}
+  g.strokeStyle='#cfcfca';g.lineWidth=3;for(let k=0;k<=256;k+=128){g.beginPath();g.moveTo(k,0);g.lineTo(k,256);g.stroke();g.beginPath();g.moveTo(0,k);g.lineTo(256,k);g.stroke();}}
+ if(kind==='subway'){ // 100x200 кабанчик, 4 rows x 1 brick per 256 => tile 200 wide x 100 high
+  g.fillStyle='#fafaf8';g.fillRect(0,0,256,256);g.strokeStyle='#d2d2cd';g.lineWidth=3;
+  for(let r=0;r<4;r++){const y=r*64;g.beginPath();g.moveTo(0,y);g.lineTo(256,y);g.stroke();const off=r%2?64:0;for(let x=off;x<=256;x+=128){g.beginPath();g.moveTo(x,y);g.lineTo(x,y+64);g.stroke();}}
+  for(let r=0;r<4;r++)for(let x=(r%2?64:0)-128;x<256;x+=128){const gr=g.createLinearGradient(0,r*64,0,r*64+64);gr.addColorStop(0,'rgba(255,255,255,.5)');gr.addColorStop(1,'rgba(0,0,0,.04)');g.fillStyle=gr;g.fillRect(x+3,r*64+3,122,58);}}
+ if(kind==='diag'){ // плитка 60×60 по диагонали: 256px = 1697 мм
+  g.fillStyle='#a7a6a2';g.fillRect(0,0,256,256);for(let n=0;n<2600;n++){const v=Math.random();g.fillStyle=v>0.5?'rgba(255,255,255,0.06)':'rgba(0,0,0,0.06)';const r=1+Math.random()*5;g.fillRect(Math.random()*256,Math.random()*256,r,r);}g.strokeStyle='#8e8d89';g.lineWidth=2;
+  for(let k=-512;k<=512;k+=128){g.beginPath();g.moveTo(k,0);g.lineTo(k+256,256);g.stroke();g.beginPath();g.moveTo(k,256);g.lineTo(k+256,0);g.stroke();}}
+ if(kind==='oak'){ // ламинат дуб светлый, доска 1380×193
+  for(let r=0;r<8;r++){const off=(r*97)%256;for(let x=-256;x<256;x+=256){const v=Math.floor(Math.random()*18);g.fillStyle=`rgb(${214+v},${178+v},${128+v})`;g.fillRect(x+off,r*32,256,32);
+   g.strokeStyle='rgba(120,80,40,.10)';g.lineWidth=1;for(let q=0;q<6;q++){g.beginPath();const yy=r*32+4+q*5+Math.random()*3;g.moveTo(x+off,yy);g.bezierCurveTo(x+off+80,yy+3,x+off+170,yy-3,x+off+256,yy);g.stroke();}
+   g.fillStyle='rgba(90,60,30,.35)';g.fillRect(x+off,r*32,2,32);}
+   g.fillStyle='rgba(90,60,30,.3)';g.fillRect(0,r*32,256,1);}}
+ const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.encoding=THREE.sRGBEncoding;t.anisotropy=4;return t;}
+const TEX={chess:texCanvas('chess'),subway:texCanvas('subway'),diag:texCanvas('diag'),oak:texCanvas('oak')};
+// period of texture in mm
+function texMat(kind,w,h,o={},P=400){const t=TEX[kind].clone();t.needsUpdate=true;t.repeat.set(w/P,h/(kind==='oak'?P/2:P));
+ const m=new THREE.MeshStandardMaterial(Object.assign({map:t,roughness:{chess:0.35,subway:0.25,diag:0.45,oak:0.6}[kind]},o));clipList.push(m);return m;}
+const mat={
+ wall:CM(0xa7a7a3,{roughness:0.95}),
+ white:CM(0xf2f1ec,{roughness:0.6}),
+ floor:M(0xcfb592,{roughness:0.8}),
+ wallW:CM(0xf4f3ef,{roughness:0.95}),
+ beech:CM(0xd9b48a,{roughness:0.6}),
+ pine:CM(0xd29a50,{roughness:0.7}),
+ pineD:CM(0xbf8846,{roughness:0.7}),
+ blue:CM(0x7fb6e0,{roughness:0.55}),
+ velour:CM(0x2e5a40,{roughness:1}),
+ velourD:M(0x23452f,{roughness:1}),
+ black:CM(0x1c1c1c,{roughness:0.4}),
+ steel:CM(0xbfc3c6,{roughness:0.3,metalness:0.8}),
+ glass:CM(0xbfe0ef,{transparent:true,opacity:0.35,roughness:0.05}),
+ fabric:CM(0x8c8984,{roughness:1}),
+ bed:M(0xece6dc,{roughness:1}),
+ wood:CM(0x9a7552,{roughness:0.7}),
+ ceramic:M(0xffffff,{roughness:0.2}),
+ tv:CM(0x111214,{roughness:0.2,metalness:0.3}),
+ gold:M(0xc9a54a,{roughness:0.35,metalness:0.8}),
+ lamp:M(0xfff4dc,{emissive:0xffe2a8,emissiveIntensity:0.6}),
+ curtain:CM(0xe6e0d4,{roughness:1,side:THREE.DoubleSide}),
+ plant:CM(0x4f7d3a),
+ flame:M(0xff8a2a,{emissive:0xff6a00,emissiveIntensity:1.2}),
+ mirror:CM(0xcfdde4,{roughness:0.08,metalness:0.35}),
+ rug:M(0xb9b2a6,{roughness:1})
+};
+const root=new THREE.Group();scene.add(root);
+function B(x1,z1,x2,z2,y1,y2,m,parent){
+ const w=Math.abs(x2-x1)/1000,d=Math.abs(z2-z1)/1000,h=Math.abs(y2-y1)/1000;
+ const g=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);
+ g.position.set((x1+x2)/2000,(y1+y2)/2000,(z1+z2)/2000);
+ g.castShadow=true;g.receiveShadow=true;(parent||root).add(g);return g;}
+function CYL(x,z,y1,y2,r,m,seg=20,parent){const g=new THREE.Mesh(new THREE.CylinderGeometry(r/1000,r/1000,(y2-y1)/1000,seg),m);g.position.set(x/1000,(y1+y2)/2000,z/1000);g.castShadow=true;g.receiveShadow=true;(parent||root).add(g);return g;}
+function SPH(x,y,z,r,m,parent){const g=new THREE.Mesh(new THREE.SphereGeometry(r/1000,16,12),m);g.position.set(x/1000,y/1000,z/1000);g.castShadow=true;(parent||root).add(g);return g;}
+
+// ---------- WALLS ----------
+// wall along X (z1..z2 band), openings [a,b,yBottom,yTop]
+function WX(x1,x2,z1,z2,ops=[]){let cur=x1;ops.sort((p,q)=>p[0]-q[0]);
+ for(const [a,b,yb,yt] of ops){if(a>cur)B(cur,z1,a,z2,0,H,mat.wall);if(yb>0)B(a,z1,b,z2,0,yb,mat.wall);if(yt<H)B(a,z1,b,z2,yt,H,mat.wall);cur=b;}
+ if(cur<x2)B(cur,z1,x2,z2,0,H,mat.wall);}
+function WZ(z1,z2,x1,x2,ops=[]){let cur=z1;ops.sort((p,q)=>p[0]-q[0]);
+ for(const [a,b,yb,yt] of ops){if(a>cur)B(x1,cur,x2,a,0,H,mat.wall);if(yb>0)B(x1,a,x2,b,0,yb,mat.wall);if(yt<H)B(x1,a,x2,b,yt,H,mat.wall);cur=b;}
+ if(cur<z2)B(x1,cur,x2,z2,0,H,mat.wall);}
+const WIN=[[734,2038],[4025,5299],[7316,8611]];
+// Размеры по плану «конечная» (мм, от внутренних граней: X — от левой стены, Z — от стены с окнами)
+WX(-285,10080,-390,0,WIN.map(w=>[w[0],w[1],0,2700]));
+WIN.forEach(([a,b])=>{B(a,-390,b,-150,0,900,mat.wall);B(a,-150,b,0,780,900,mat.wall);});
+WZ(-390,11675,-285,0);
+WZ(-390,8645,9700,10080);
+WX(2344,10080,8245,8645,[[7800,8800,0,2100]]);           // стена у буфета / входная
+WZ(8245,11675,2344,2744);                                // правая стена кухни
+WX(-285,2744,11325,11675,[[1019,2109,0,2700]]);B(1019,11475,2109,11675,0,900,mat.wall);B(1019,11325,2109,11475,780,900,mat.wall);
+// перегородки
+WZ(0,4688,2845,2920,[[3722,4570,0,2370]]);   // кабинет | гостиная; внизу — дверь в коридорчик кабинета под балкой
+WX(0,1900,3496,3722);                        // кабинет | ванна (226)
+WZ(3722,4752,1830,1900);                     // ванна | коридорчик (ниже перегородки нет — убрана)
+WX(1830,2845,4688,4752);                     // низ коридорчика = задняя стенка ниши стиралки
+WZ(0,3581,6143,6218);
+WX(6218,7706,3501,3581,[[6760,7600,0,2370]]);
+WZ(3581,6632,7626,7706,[[4616,5416,0,2370]]);
+WX(7706,9700,4105,4245);
+WX(7626,9700,6492,6632);
+B(3277,5675,3351,6630,0,H,mat.wall);          // под левой колонной — ниша-стеллаж со стороны санузла, в холл ровная стена
+WX(0,3351,6563,6630,[[1830,2590,0,2370]]);   // низ санузла, дверь со стороны кухни
+B(1595,6630,1665,7230,0,H,mat.wall);          // стенка ниши кухни у газовой колонки
+// ригели (сталинка): 2 опорные балки ~300 вдоль всей квартиры, лежат на колоннах
+const BEAM_DROP=350;
+B(2620,0,2920,8245,H-BEAM_DROP,H,mat.wall);
+B(5843,0,6143,8245,H-BEAM_DROP,H,mat.wall);
+// колонны
+B(2845,4688,3351,5675,0,H,mat.wall);
+B(5790,4688,6290,5675,0,H,mat.wall);
+
+// ---------- WALL FINISHES (white rooms, tile) ----------
+function finX(x1,x2,z,side,ops,mk){let cur=x1;const parts=[];(ops||[]).sort((p,q)=>p[0]-q[0]);
+ for(const [a,b,yb,yt] of (ops||[])){if(a>cur)parts.push([cur,a,0,H]);if(yb>0)parts.push([a,b,0,yb]);if(yt<H)parts.push([a,b,yt,H]);cur=b;}if(cur<x2)parts.push([cur,x2,0,H]);
+ parts.forEach(([a,b,y1,y2])=>{const m=mk(b-a,y2-y1);const p=new THREE.Mesh(new THREE.PlaneGeometry((b-a)/1000,(y2-y1)/1000),m);p.position.set((a+b)/2000,(y1+y2)/2000,(z+side*1.5)/1000);if(side<0)p.rotation.y=Math.PI;p.receiveShadow=true;root.add(p);});}
+function finZ(z1,z2,x,side,ops,mk){let cur=z1;const parts=[];(ops||[]).sort((p,q)=>p[0]-q[0]);
+ for(const [a,b,yb,yt] of (ops||[])){if(a>cur)parts.push([cur,a,0,H]);if(yb>0)parts.push([a,b,0,yb]);if(yt<H)parts.push([a,b,yt,H]);cur=b;}if(cur<z2)parts.push([cur,z2,0,H]);
+ parts.forEach(([a,b,y1,y2])=>{const m=mk(b-a,y2-y1);const p=new THREE.Mesh(new THREE.PlaneGeometry((b-a)/1000,(y2-y1)/1000),m);p.position.set((x+side*1.5)/1000,(y1+y2)/2000,(a+b)/2000);p.rotation.y=side>0?Math.PI/2:-Math.PI/2;p.receiveShadow=true;root.add(p);});}
+const WHITE=()=>mat.wallW, TILE=(w,h)=>texMat('chess',w,h);
+// кабинет + коридорчик
+finX(0,2845,0,1,[[734,2038,0,2700]],WHITE);finZ(0,3496,0,1,[],WHITE);finZ(0,4688,2845,-1,[[3722,4570,0,2370]],WHITE);finX(0,1900,3496,-1,[],WHITE);
+finZ(3496,4688,1900,1,[],WHITE);finX(1900,2845,4688,-1,[],WHITE);
+// гостиная
+finX(2920,6143,0,1,[[4025,5299,0,2700]],WHITE);finZ(0,3576,2920,1,[],WHITE);finZ(0,3576,6143,-1,[],WHITE);
+// спальня
+finX(6218,9700,0,1,[[7316,8611,0,2700]],WHITE);finZ(0,3501,6218,1,[],WHITE);finZ(0,3501,9700,-1,[],WHITE);finX(6218,7706,3501,-1,[[6760,7600,0,2370]],WHITE);
+// санузел — белая плитка 20×20 шахматкой (зеркало врезано в левую стену)
+finZ(3722,6563,0,1,[[4820,5820,950,H]],TILE);finX(0,1830,3722,1,[],TILE);finZ(3722,4752,1830,-1,[],TILE);
+finX(1900,2845,4752,1,[],TILE);finZ(4752,5675,2845,-1,[],TILE);finZ(5675,6563,3277,-1,[],TILE);finX(0,3277,6563,-1,[[1830,2590,0,2370]],TILE);
+
+// ---------- FLOORS ----------
+function FL(x1,z1,x2,z2,m,y=0){const g=new THREE.Mesh(new THREE.PlaneGeometry((x2-x1)/1000,(z2-z1)/1000),m);g.rotation.x=-Math.PI/2;g.position.set((x1+x2)/2000,y/1000,(z1+z2)/2000);g.receiveShadow=true;root.add(g);return g;}
+// пол: плитка 60×60 серая под бетон, по диагонали везде, кроме спален; в спальнях ламинат «дуб светлый»
+FL(-285,-390,10080,8645,texMat('diag',10365,9035,{},1697),0);
+FL(-285,8645,2744,11675,texMat('diag',3029,3030,{},1697),0);
+FL(0,0,2845,3496,texMat('oak',2845,3496,{},1380),2);
+FL(1900,3496,2845,4688,texMat('oak',945,1192,{},1380),2); // коридорчик кабинета — ламинат
+FL(6218,0,9700,3501,texMat('oak',3482,3501,{},1380),2);
+// slab under
+B(-285,-390,10080,8510,-120,-1,M(0x7d7a74));B(-285,8510,2744,11620,-120,-1,M(0x7d7a74));
+
+// ---------- WINDOWS ----------
+const radM=CM(0xf6f6f4,{roughness:0.4});
+function windowX(a,b,z1,z2){const zm=(z1+z2)/2,Y1=900,Y2=2700;B(a,zm-30,b,zm+30,Y1,Y1+30,mat.white);B(a,zm-30,b,zm+30,Y2-30,Y2,mat.white);
+ B(a,zm-30,a+40,zm+30,Y1,Y2,mat.white);B(b-40,zm-30,b,zm+30,Y1,Y2,mat.white);B((a+b)/2-20,zm-30,(a+b)/2+20,zm+30,Y1,Y2,mat.white);
+ const g=new THREE.Mesh(new THREE.PlaneGeometry((b-a)/1000,(Y2-Y1)/1000),mat.glass);g.position.set((a+b)/2000,(Y1+Y2)/2000,zm/1000);root.add(g);
+ const zi=z1<0?0:z1, dir=z1<0?1:-1;
+ B(a,zm+dir*30,b,zi,870,900,mat.white); // подоконник — в плоскости стены, не выступает
+ // радиатор в нише под подоконником
+ const zr=z1<0?-150:z1+150;
+ for(let x=a+80;x<b-80;x+=80)B(x+5,zr+dir*10,x+75,zr+dir*110,150,650,radM);}
+WIN.forEach(w=>windowX(w[0],w[1],-390,0));
+windowX(1019,2109,11325,11675);
+// curtains: living & bedroom
+function curtain(a,b,z){const n=24,w=(b-a)/n;for(let i=0;i<n;i++){const x=a+i*w;const zz=z+ (i%2?40:0);B(x,zz,x+w+5,zz+20,40,H-5,mat.curtain);}}
+// шторы пока не ставим — чтобы были видны окна
+// ниши под шторы в натяжном потолке — во всю длину стены с окном (кабинет, гостиная, спальня, кухня)
+(function(){const nm=CM(0x2a2a2a);B(0,0,2845,150,H-4,H,nm);B(2920,0,6143,150,H-4,H,nm);B(6218,0,9700,150,H-4,H,nm);B(0,11175,2344,11325,H-4,H,nm);})();
+
+// ---------- DOORS (Волховец, сосна, 2300) ----------
+function casingX(a,b,z1,z2){const t=15;[[z1-t,z1],[z2,z2+t]].forEach(([p,q])=>{B(a-70,p,a,q,0,2440,mat.pineD);B(b,p,b+70,q,0,2440,mat.pineD);B(a-70,p,b+70,q,2370,2440,mat.pineD);});B(a,z1,a+30,z2,0,2370,mat.pineD);B(b-30,z1,b,z2,0,2370,mat.pineD);B(a,z1,b,z2,2340,2370,mat.pineD);}
+function casingZ(a,b,x1,x2){const t=15;[[x1-t,x1],[x2,x2+t]].forEach(([p,q])=>{B(p,a-70,q,a,0,2440,mat.pineD);B(p,b,q,b+70,0,2440,mat.pineD);B(p,a-70,q,b+70,2370,2440,mat.pineD);});B(x1,a,x2,a+30,0,2370,mat.pineD);B(x1,b-30,x2,b,0,2370,mat.pineD);B(x1,a,x2,b,2340,2370,mat.pineD);}
+function leaf(hx,hz,w,phi){const g=new THREE.Group();g.position.set(hx/1000,0,hz/1000);g.rotation.y=phi;
+ const p=new THREE.Mesh(new THREE.BoxGeometry(w/1000,2.3,0.04),mat.pine);p.position.set(w/2000,1.15+0.01,0);p.castShadow=true;g.add(p);
+ [[0.25,0.85],[1.25,1.0]].forEach(([y,h])=>{const r=new THREE.Mesh(new THREE.BoxGeometry(w/1000-0.16,h,0.046),mat.pineD);r.position.set(w/2000,y+h/2+0.12,0);g.add(r);});
+ const hd=new THREE.Mesh(new THREE.BoxGeometry(0.12,0.02,0.07),mat.black);hd.position.set(w/1000-0.08,1.0,0);g.add(hd);root.add(g);}
+casingX(6760,7600,3501,3581);leaf(6790,3541,780,1.15);
+casingZ(3722,4570,2845,2920);leaf(2882,4540,780,Math.PI/2+1.15); // дверь в кабинет со стороны гостиной, под балкой
+casingX(1830,2590,6563,6630);leaf(2560,6596,700,Math.PI-1.15); // дверь в санузел со стороны кухни
+casingZ(4616,5416,7626,7706);
+// entrance steel door
+B(7820,8405,8780,8465,0,2080,M(0x3a3632,{roughness:0.5}));B(8650,8355,8670,8405,950,1150,mat.steel);
+
+// ---------- КАБИНЕТ ----------
+B(0,0,603,1222,0,2100,mat.white);B(300,600,305,1222,40,2060,M(0xd8d6d0));
+B(603,0,2845,603,720,750,mat.wood);B(640,40,700,560,0,720,mat.black);B(1700,40,1760,560,0,720,mat.black);B(2560,40,2620,560,0,720,mat.black);
+// desk chair
+(function(){const x=1500,z=1050;CYL(x,z,0,60,280,mat.black,5);CYL(x,z,60,450,25,mat.steel);B(x-240,z-240,x+240,z+240,450,520,mat.black);B(x-230,z+200,x+230,z+260,520,1050,mat.black);})();
+// sofa кабинет
+B(0,1340,850,3340,0,420,mat.fabric);B(0,1340,220,3340,420,850,mat.fabric);B(0,1340,850,1520,420,620,mat.fabric);B(0,3160,850,3340,420,620,mat.fabric);
+// стеллаж + ТВ
+(function(){const x1=2565,x2=2845,z1=611,z2=2955;B(x1,z1,x2,z1+25,0,2000,mat.white);B(x1,z2-25,x2,z2,0,2000,mat.white);for(let y=0;y<=2000;y+=400)B(x1,z1,x2,z2,y,y+25,mat.white);B(x2-20,z1,x2,z2,0,2000,mat.white);
+ B(x1+40,1250,x1+80,2350,1030,1640,mat.tv);})();
+
+// ---------- ГОСТИНАЯ ----------
+// tufted green velour sofa 3000x1000
+(function(){const x1=2920,x2=3920,z1=255,z2=3255;
+ B(x1,z1,x2,z2,0,120,mat.black);
+ B(x1+250,z1+200,x2,z2-200,120,440,mat.velour);
+ B(x1,z1,x1+250,z2,120,900,mat.velour);
+ B(x1,z1,x2,z1+200,120,640,mat.velour);B(x1,z2-200,x2,z2,120,640,mat.velour);
+ const bt=M(0x1a3526,{roughness:0.6});
+ let row=0;for(let y=500;y<=860;y+=120,row++)for(let z=z1+260+(row%2?90:0);z<z2-220;z+=180)SPH(x1+252,y,z,13,bt);
+ row=0;for(let x=x1+340;x<x2-60;x+=150,row++)for(let z=z1+300+(row%2?90:0);z<z2-260;z+=180)SPH(x,442,z,11,bt);
+ [z1+100,z2-100].forEach(zz=>{for(let x=x1+120;x<x2-60;x+=150)SPH(x,642,zz,11,bt);});
+ // cushions
+ for(let z=z1+450;z<z2-350;z+=750)B(x1+250,z,x1+400,z+450,440,800,M(0x3c6e52,{roughness:1}));})();
+B(4150,1300,4800,2200,0,420,M(0x6f6a62,{roughness:1}));
+B(3950,700,5700,3000,0,8,mat.rug);
+// TV + bio-fireplace wall unit
+(function(){const x1=5793,x2=6143;B(x1,0,x2,3274,0,450,mat.white);B(x1+20,1000,x1+40,2300,120,380,mat.black);B(x1+40,1100,x1+150,2200,140,170,mat.steel);
+ for(let z=1150;z<2150;z+=60){const f=new THREE.Mesh(new THREE.ConeGeometry(0.025,0.12+Math.random()*0.08,6),mat.flame);f.position.set((x1+95)/1000,0.24,z/1000);root.add(f);}
+ B(6100,1050,6143,2550,1050,1900,mat.tv);})();
+
+// ---------- СПАЛЬНЯ ----------
+(function(){B(7700,900,9700,2700,0,330,M(0x8a8178));B(7720,920,9600,2680,330,560,mat.bed);B(9620,880,9700,2720,0,1150,M(0x8a8178));
+ B(9300,1000,9580,1750,560,700,M(0xffffff));B(9300,1850,9580,2600,560,700,M(0xffffff));B(7700,920,8900,2680,560,600,M(0xb7aa98));
+ B(9250,450,9700,850,0,480,mat.wood);B(9250,2750,9700,3150,0,480,mat.wood);})();
+(function(){const x1=6218,x2=6568,z1=0,z2=3200;B(x1,z1,x2,z2,0,450,mat.white);B(x1,z1,x2,z1+25,450,2000,mat.white);B(x1,z2-25,x2,z2,450,2000,mat.white);B(x1,z1,x1+20,z2,450,2000,mat.white);for(let y=800;y<=2000;y+=400)B(x1,z1,x2,z1+700,y,y+25,mat.white),B(x1,z2-700,x2,z2,y,y+25,mat.white);B(x2-10,1000,x2+20,2200,900,1600,mat.tv);})();
+// built-in closet (to ceiling) white MDF
+function closetZ(x1,x2,zFront,zBack,doors){ // front along X at zFront
+ B(x1,Math.min(zFront,zBack),x2,Math.max(zFront,zBack),0,H,mat.white);
+ const w=(x2-x1)/doors, s=zFront<zBack?-1:1;
+ for(let i=1;i<doors;i++)B(x1+i*w-2,zFront+s*2,x1+i*w+2,zFront+s*4,30,H-10,M(0xcfcdc7));
+ for(let i=0;i<doors;i++){const hx=x1+i*w+(i%2?18:w-18);B(hx-8,zFront+s*4,hx+8,zFront+s*28,1000,1500,mat.steel);} }
+function closetX(z1,z2,xFront,xBack,doors){B(Math.min(xFront,xBack),z1,Math.max(xFront,xBack),z2,0,H,mat.white);
+ const w=(z2-z1)/doors,s=xFront<xBack?-1:1;
+ for(let i=1;i<doors;i++)B(xFront+s*2,z1+i*w-2,xFront+s*4,z1+i*w+2,30,H-10,M(0xcfcdc7));
+ for(let i=0;i<doors;i++){const hz=z1+i*w+(i%2?18:w-18);B(xFront+s*4,hz-8,xFront+s*28,hz+8,1000,1500,mat.steel);} }
+closetZ(7706,9700,3501,4101,4);
+
+// ---------- ГАРДЕРОБНАЯ ----------
+B(7706,4245,9100,4646,0,1000,mat.white);B(7706,4245,9100,4360,1000,H,mat.white);
+for(let y=1300;y<H;y+=450)B(7706,4360,9100,4646,y,y+20,mat.white);
+closetX(4245,6492,9100,9700,4);
+closetZ(7706,9100,5892,6492,3);
+
+// ---------- ПРИХОЖАЯ / ХОЛЛ ----------
+closetX(6632,8245,9100,9700,3);
+B(8000,6632,8800,6932,760,800,mat.white);B(8030,6650,8070,6910,0,760,mat.black);B(8730,6650,8770,6910,0,760,mat.black);
+B(8050,6632,8750,6650,950,2050,mat.mirror);
+// bench + hooks
+B(5829,7895,7626,8245,0,450,mat.pine);B(5829,8225,7626,8245,1650,1800,mat.pine);
+for(let x=6000;x<7600;x+=220)B(x,8175,x+20,8225,1700,1730,mat.black);
+// buffet
+B(3283,7895,5829,8245,0,900,mat.white);B(3283,7885,5829,7895,60,880,M(0xe6e4de));B(3283,7895,5829,8245,900,930,mat.pine);
+for(let x=3283+636;x<5829;x+=636)B(x-2,7880,x+2,7887,60,880,M(0xcfcdc7));
+// plant
+CYL(2980,8040,0,350,170,M(0xe8e4dc));SPH(2980,750,8040,320,mat.plant);
+// stellages under pillars
+function stell(x1,x2,z1,z2){B(x1,z1,x2,z1+25,0,2000,mat.white);B(x1,z2-25,x2,z2,0,2000,mat.white);for(let y=0;y<=2000;y+=400)B(x1,z1,x2,z2,y,y+25,mat.white);}
+// ниша под левой колонной (справа от двери, как заходишь): внизу стиральная машина, выше полки
+(function(){const x1=2845,x2=3277,z1=5675,z2=6563;B(x1,z1,x2,z1+25,0,2000,mat.white);B(x1,z2-25,x2,z2,0,2000,mat.white);for(let y=900;y<=2000;y+=370)B(x1,z1,x2,z2,y,y+25,mat.white);})();
+stell(5866,6290,5675,6563);
+// TV on right pillar (west face), panno (east face)
+B(5760,4848,5790,5528,1050,1450,mat.tv);
+B(6290,4798,6310,5578,900,2100,M(0x6d8a8f,{roughness:0.9}));
+// dining
+// столовой группы нет — место пустое
+function chair(x,z,rot,m){const g=new THREE.Group();g.position.set(x/1000,0,z/1000);g.rotation.y=rot;root.add(g);
+ const mm=m||mat.wood;[[-0.19,-0.19],[0.19,-0.19],[-0.19,0.19],[0.19,0.19]].forEach(([a,b])=>{const l=new THREE.Mesh(new THREE.BoxGeometry(0.035,0.45,0.035),mat.black);l.position.set(a,0.225,b);l.castShadow=true;g.add(l);});
+ const s=new THREE.Mesh(new THREE.BoxGeometry(0.44,0.05,0.44),mm);s.position.y=0.47;s.castShadow=true;g.add(s);
+ const bk=new THREE.Mesh(new THREE.BoxGeometry(0.44,0.4,0.04),mm);bk.position.set(0,0.72,0.2);bk.castShadow=true;g.add(bk);return g;}
+
+
+// ---------- САНУЗЕЛ ----------
+(function(){
+ // bath
+ B(30,3740,1800,4640,0,560,mat.ceramic);B(130,3820,1700,4560,380,562,M(0xdfe8ec,{roughness:0.1}));
+ B(1500,3730,1560,3750,600,1100,mat.steel);
+ // умывальник 1100: столешница и полка из массива бука на белых опорах, накладная керамическая раковина
+ B(0,4770,520,5870,820,860,mat.beech);B(0,4790,500,5850,280,310,mat.beech);
+ [4770,5840].forEach(z=>{B(0,z,520,z+30,0,820,mat.white);B(470,z,520,z+30,0,820,mat.white);});
+ (function(){const b=new THREE.Mesh(new THREE.CylinderGeometry(0.21,0.17,0.14,32),mat.ceramic);b.scale.set(0.85,1,1.2);b.position.set(0.27,0.93,5.32);b.castShadow=true;root.add(b);
+  const i=new THREE.Mesh(new THREE.CylinderGeometry(0.18,0.15,0.01,32),M(0xe6edf0,{roughness:0.1}));i.scale.set(0.85,1,1.2);i.position.set(0.27,0.995,5.32);root.add(i);})();
+ CYL(60,5320,860,1180,14,mat.steel);B(60,5310,200,5330,1160,1180,mat.steel);
+ B(0,4820,4,5820,950,H,mat.mirror); // зеркало, врезанное в плитку до потолка
+ // унитаз в инсталляции
+ B(0,5900,200,6500,0,H,mat.ceramic); // короб инсталляции до потолка (коммуникации)
+ B(195,6130,205,6270,1000,1150,M(0xdcdcdc));
+ const bowl=new THREE.Mesh(new THREE.BoxGeometry(0.55,0.36,0.38),mat.ceramic);bowl.position.set(0.47,0.4,6.2);bowl.castShadow=true;root.add(bowl);
+ // washer + химия
+ B(2850,5900,3277,6500,0,850,M(0xf4f4f4));const dr=new THREE.Mesh(new THREE.CylinderGeometry(0.17,0.17,0.02,30),M(0x6b7a83,{roughness:0.1}));dr.rotation.z=Math.PI/2;dr.position.set(2.845,0.48,6.2);root.add(dr);
+ B(2550,4752,2845,5245,0,2000,mat.white);
+ // towel dryer
+ for(let y=900;y<=1600;y+=140)B(900,6533,1400,6558,y,y+20,mat.steel);B(900,6533,920,6558,900,1620,mat.steel);B(1380,6533,1400,6558,900,1620,mat.steel);
+})();
+
+// ---------- КУХНЯ ----------
+const kitchen=new THREE.Group();root.add(kitchen);
+function base(x1,z1,x2,z2,top=true){B(x1,z1,x2,z2,0,100,mat.black,kitchen);B(x1,z1,x2,z2,100,860,mat.blue,kitchen);if(top)B(x1,z1,x2,z2,860,900,mat.pine,kitchen);}
+// top run along bathroom wall (with corner)
+base(0,6630,1595,7230);
+for(let x=600;x<1595;x+=495)B(x-2,7227,x+2,7233,110,850,M(0x7fa3bb),kitchen);
+// left run
+base(0,7230,600,7725);base(0,7725,600,8625);base(0,8625,600,9525);base(0,9525,600,10125);
+[7725,8625,9525].forEach(z=>B(598,z-2,604,z+2,110,850,M(0x7fa3bb),kitchen));
+B(598,9535,606,10115,480,484,M(0x7fa3bb),kitchen);
+// fridge gap 10070..10670 — empty
+// tall pencil with oven + micro
+// после 9470+600 тумб нет — около метра до стены под холодильник
+// духовой шкаф под варочной панелью
+B(600,8775,612,9375,200,790,M(0x151515,{roughness:0.15}),kitchen);B(612,8815,632,9335,720,740,mat.steel,kitchen);
+// sink + mixer
+B(80,7955,500,8395,860,905,M(0x55585a,{roughness:0.3}),kitchen);CYL(60,8175,900,1200,14,mat.steel,12,kitchen);B(60,8165,240,8185,1180,1200,mat.steel,kitchen);
+// hob
+B(40,8705,560,9445,900,906,M(0x101010,{roughness:0.1}),kitchen);
+[[180,8875],[420,8875],[180,9275],[420,9275]].forEach(([x,z])=>{const r=new THREE.Mesh(new THREE.TorusGeometry(0.06,0.01,6,20),mat.black);r.rotation.x=Math.PI/2;r.position.set(x/1000,0.915,z/1000);kitchen.add(r);});
+// umbrella hood
+(function(){const g=new THREE.Mesh(new THREE.CylinderGeometry(0.12,0.42,0.28,4,1),mat.steel);g.rotation.y=Math.PI/4;g.scale.set(1,1,1.25);g.position.set(0.32,1.82,9.075);g.castShadow=true;kitchen.add(g);
+ B(200,8955,440,9195,1960,H,mat.steel,kitchen);})();
+// газовая колонка (ГВС) и верхние шкафы только над этим участком — в нишу до потолка, двухъярусные
+(function(){const Y1=1900,YM=2500;
+ const up=(x1,x2,y1,y2)=>{B(x1,6630,x2,6980,y1,y2,mat.blue,kitchen);B(x1+2,6980,x2-2,6983,y1+2,y2-2,M(0x8fbfe3),kitchen);};
+ up(0,450,Y1,YM);up(450,900,Y1,YM);up(0,450,YM,H);up(450,900,YM,H);
+ up(1340,1595,Y1,YM);up(1340,1595,YM,H);
+ up(900,1340,2620,H); // над колонкой
+ B(920,6630,1320,6930,1950,2580,M(0xf7f7f7),kitchen);B(1080,6930,1160,6935,2050,2150,M(0x333333),kitchen); // колонка
+ CYL(1120,6780,2580,2620,60,mat.steel,16,kitchen);})();
+// фартук: белый кабанчик 100×200, вразбежку, 1 м от столешницы; везде, кроме места холодильника
+(function(){const y1=900,y2=1900;
+ const a=new THREE.Mesh(new THREE.PlaneGeometry(1.591,(y2-y1)/1000),texMat('subway',1591,y2-y1));a.position.set(0.7955,(y1+y2)/2000,6.6315);kitchen.add(a);
+ const b=new THREE.Mesh(new THREE.PlaneGeometry(10.125-7.230,(y2-y1)/1000),texMat('subway',10125-7230,y2-y1));b.rotation.y=Math.PI/2;b.position.set(0.0015,(y1+y2)/2000,(7230+10125)/2000);kitchen.add(b);
+ const c=new THREE.Mesh(new THREE.PlaneGeometry(0.6,(y2-y1)/1000),texMat('subway',600,y2-y1));c.rotation.y=Math.PI/2;c.position.set(0.0015,(y1+y2)/2000,(6630+7230)/2000);kitchen.add(c);
+})();
+// kitchen table 1200x700, pine
+B(1644,9125,2344,10325,720,760,mat.pine,kitchen);
+const legsG=new THREE.Group();kitchen.add(legsG);
+function setLegs(v){while(legsG.children.length)legsG.remove(legsG.children[0]);
+ const L=(x1,z1,x2,z2,y1,y2,m)=>B(x1,z1,x2,z2,y1,y2,m,legsG);
+ if(v===0){[[1700,9185],[2250,9185],[1700,10225],[2250,10225]].forEach(([x,z])=>L(x,z,x+50,z+50,0,720,mat.pineD));L(1700,9185,2300,9205,640,720,mat.pineD);L(1700,10255,2300,10275,640,720,mat.pineD);}
+ if(v===1){[9205,10225].forEach(z=>{L(1700,z,1740,z+40,0,720,mat.black);L(2250,z,2290,z+40,0,720,mat.black);L(1700,z,2290,z+40,680,720,mat.black);L(1700,z,2290,z+40,0,20,mat.black);});}
+ if(v===2){[9255,10195].forEach(z=>{const mk=(a)=>{const b=new THREE.Mesh(new THREE.BoxGeometry(0.06,0.84,0.05),mat.pineD);b.position.set(1.99,0.37,(z+25)/1000);b.rotation.z=a;b.castShadow=true;legsG.add(b);};mk(0.62);mk(-0.62);});L(1960,9255,2020,10245,330,380,mat.pineD);}
+ if(v===3){L(2300,9125,2344,10325,640,720,mat.pineD);[[1700,9205],[1700,10225]].forEach(([x,z])=>L(x,z,x+40,z+40,0,720,mat.black));L(1700,9205,1740,10265,0,20,mat.black);}
+}
+setLegs(1);
+chair(1380,9425,Math.PI/2);chair(1380,10025,Math.PI/2);chair(2000,8835,Math.PI);chair(2000,10595,0);
+
+// ---------- КОНДИЦИОНЕРЫ (по одному в спальнях, поток параллельно окну) ----------
+function ac(xWall,z,dirX){const d=dirX>0?1:-1;B(xWall,z-400,xWall+d*220,z+400,2650,2950,CM(0xfbfbfb,{roughness:0.3}));B(xWall+d*215,z-370,xWall+d*222,z+370,2665,2700,CM(0x9ea3a6));
+ const fm=new THREE.MeshBasicMaterial({color:0x8fd0ff,transparent:true,opacity:0.18,depthWrite:false,side:THREE.DoubleSide});clipList.push(fm);const flow=new THREE.Mesh(new THREE.ConeGeometry(0.25,1.4,20,1,true),fm);
+ flow.rotation.z=d>0?Math.PI/2:-Math.PI/2;flow.position.set((xWall+d*950)/1000,2.55,z/1000);root.add(flow);}
+ac(0,600,1);      // кабинет: на левой стене у окна, дует вдоль окна
+ac(9700,600,-1);  // спальня: на правой стене у окна, дует вдоль окна
+
+// ---------- LIGHTS (fixtures) ----------
+const fixtures=[];
+function chandelier(x,z){const g=new THREE.Group();g.position.set(x/1000,0,z/1000);root.add(g);
+ const rl=H/1000-2.33;const rod=new THREE.Mesh(new THREE.CylinderGeometry(0.008,0.008,rl,6),mat.gold);rod.position.y=2.33+rl/2;g.add(rod);
+ const c=new THREE.Mesh(new THREE.SphereGeometry(0.05,12,8),mat.gold);c.position.y=2.33;g.add(c);
+ for(let i=0;i<5;i++){const a=i*Math.PI*2/5;const arm=new THREE.Mesh(new THREE.CylinderGeometry(0.006,0.006,0.32,6),mat.gold);arm.rotation.z=Math.PI/2;arm.rotation.y=a;arm.position.set(Math.cos(a)*0.16,2.33,-Math.sin(a)*0.16);g.add(arm);
+  const sh=new THREE.Mesh(new THREE.CylinderGeometry(0.04,0.06,0.09,12),mat.lamp);sh.position.set(Math.cos(a)*0.32,2.37,-Math.sin(a)*0.32);g.add(sh);}
+ fixtures.push({x,z,y:2250,type:'ch'});}
+// гостиная+столовая: длина от окна (Z 0) до стены у буфета (Z 8110), центры половин
+chandelier(4531,2061);chandelier(4531,6184);
+// спальни: центр-центр комнаты
+chandelier(1422,1748);chandelier(7959,1750);
+function spot(x,z){const d=new THREE.Mesh(new THREE.CylinderGeometry(0.04,0.04,0.012,16),mat.lamp);d.position.set(x/1000,H/1000-0.006,z/1000);root.add(d);}
+// кухня: 4 спота в 2 ряда — над кухней и по центру прохода
+// ширина кухни 0..2344 пополам → центры половин: ряд над столешницей X 586 и над столом X 1758; по длине 6630..11325 — 4 спота в центрах четвертей
+[586,1758].forEach(x=>[7217,8391,9564,10738].forEach(z=>spot(x,z)));
+// вход: 4 спота по центру коридора — прямо от входа, через метр слева, 2 в сторону спальни
+[[8300,7300],[6958,7200],[6958,5900],[6958,4600]].forEach(p=>spot(p[0],p[1]));
+// санузел: 4 спота
+// санузел — 4 спота квадратом: по ширине ниши ванны 0..1830 (центры половин 457/1372), по длине 3722..6563 (центры половин 4432/5853); над ванной правый задний и у входа передний — на одной оси
+[[457,4432],[1372,4432],[457,5853],[1372,5853]].forEach(p=>spot(p[0],p[1]));
+// 2 поворотных спота над зеркалом, разведены в стороны
+[5020,5620].forEach(z=>{spot(330,z);const k=new THREE.Mesh(new THREE.CylinderGeometry(0.035,0.03,0.07,14),mat.black);k.position.set(0.33,H/1000-0.05,z/1000);k.rotation.z=0.45;root.add(k);});
+// sconces up/down at wardrobe entrance
+const glowM=M(0xfff0c8,{transparent:true,opacity:0.28,emissive:0xffd88a,emissiveIntensity:0.6,depthWrite:false});
+[4360,5670].forEach(z=>{B(7570,z-50,7626,z+50,1580,1820,mat.black);
+ const up=new THREE.Mesh(new THREE.ConeGeometry(0.16,0.55,16,1,true),glowM);up.position.set(7.57,2.1,z/1000);up.rotation.z=Math.PI;root.add(up);
+ const dn=new THREE.Mesh(new THREE.ConeGeometry(0.16,0.55,16,1,true),glowM);dn.position.set(7.57,1.3,z/1000);root.add(dn);});
+glowM.visible=false;
+
+// ---------- LIGHTING ----------
+const hemi=new THREE.HemisphereLight(0xffffff,0xb8b0a0,0.8);scene.add(hemi);
+const sun=new THREE.DirectionalLight(0xfff6e8,0.55);sun.position.set(CX-4,14,CZ-9);sun.target.position.set(CX,0,CZ);scene.add(sun.target);
+sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);const sc=sun.shadow.camera;sc.left=-8;sc.right=8;sc.top=8;sc.bottom=-8;sc.near=1;sc.far=40;sun.shadow.bias=-0.0006;scene.add(sun);
+const night=[];
+[[1422,1748],[4531,2061],[4531,6184],[7959,1750],[586,8391],[1758,9564],[7600,7300],[6958,5200],[1100,4900]].forEach(([x,z])=>{const l=new THREE.PointLight(0xffd9a0,0,6,2);l.position.set(x/1000,2.2,z/1000);scene.add(l);night.push(l);});
+
+// ---------- LABELS ----------
+const labels=new THREE.Group();scene.add(labels);
+function label(t,x,z){const c=document.createElement('canvas');c.width=512;c.height=128;const g=c.getContext('2d');g.font='600 58px -apple-system,Segoe UI,Roboto,sans-serif';const w=g.measureText(t).width+48;
+ g.fillStyle='rgba(255,255,255,0.88)';const x0=(512-w)/2;g.beginPath();g.roundRect?g.roundRect(x0,22,w,84,40):g.rect(x0,22,w,84);g.fill();g.fillStyle='#1d3b2b';g.textAlign='center';g.textBaseline='middle';g.fillText(t,256,66);
+ const s=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),depthTest:false}));s.scale.set(1.6,0.4,1);s.position.set(x/1000,H/1000+0.25,z/1000);s.renderOrder=10;labels.add(s);}
+label('Кабинет',1400,2300);label('Гостиная',4700,2400);label('Спальня',7700,2900);label('Гардеробная',8400,5100);
+label('Санузел',900,5300);label('Кухня',1200,9800);label('Холл',4300,5000);label('Прихожая',8300,7600);
+
+// ---------- UI ----------
+function setView(top){if(top){camera.position.set(CX,18,CZ+0.01);}else{camera.position.set(CX-6.5,10.5,CZ+10.5);}controls.target.set(CX,0.4,CZ);controls.update();}
+setView(false);
+let cut=true;function applyCut(){clipList.forEach(m=>{m.clippingPlanes=cut?[clipPlane]:[];m.clipShadows=true;m.needsUpdate=true;});document.getElementById('bCut').classList.toggle('on',cut);document.getElementById('bFull').classList.toggle('on',!cut);}
+applyCut();
+document.getElementById('bCut').onclick=()=>{cut=true;applyCut();};
+document.getElementById('bFull').onclick=()=>{cut=false;applyCut();camera.position.set(CX-7,9,CZ+9.5);controls.target.set(CX,1.5,CZ);controls.update();};
+document.getElementById('bTop').onclick=()=>setView(true);
+document.getElementById('b3d').onclick=()=>setView(false);
+let isNight=false;document.getElementById('bNight').onclick=e=>{isNight=!isNight;e.target.classList.toggle('on',isNight);
+ hemi.intensity=isNight?0.18:0.8;sun.intensity=isNight?0.0:0.55;night.forEach(l=>l.intensity=isNight?1.1:0);glowM.visible=isNight;
+ mat.lamp.emissiveIntensity=isNight?2.2:0.6;scene.background.set(isNight?0x2a2b30:0xe9e7e2);};
+document.getElementById('bLbl').onclick=e=>{labels.visible=!labels.visible;e.target.classList.toggle('on',labels.visible);};
+document.getElementById('bInfo').onclick=e=>{const i=document.getElementById('info');i.classList.toggle('show');e.target.classList.toggle('on',i.classList.contains('show'));};
+document.getElementById('bLegs').onclick=e=>{const l=document.getElementById('legs');l.classList.toggle('show');e.target.classList.toggle('on',l.classList.contains('show'));
+ if(l.classList.contains('show')){camera.position.set(3.4,3.3,11.2);controls.target.set(1.95,0.45,9.67);controls.update();}};
+document.querySelectorAll('#legs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#legs button').forEach(x=>x.classList.remove('on'));b.classList.add('on');setLegs(+b.dataset.v);});
+const onRes=()=>{camera.aspect=VW()/VH();camera.updateProjectionMatrix();renderer.setSize(VW(),VH());};addEventListener('resize',onRes);addEventListener('orientationchange',()=>setTimeout(onRes,300));document.addEventListener('visibilitychange',()=>setTimeout(onRes,200));
+(function loop(){requestAnimationFrame(loop);controls.update();renderer.render(scene,camera);})();
+</script>
+</body>
+</html>
