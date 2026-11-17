@@ -26,6 +26,11 @@ body{margin:0;min-height:calc(100% + 1px);overscroll-behavior:none;background:#2
 #docTabs button.on{background:#2f5d45;color:#fff}
 #docsClose{width:34px;padding:0;font-size:15px}
 #docView{position:absolute;inset:0;overflow:hidden;touch-action:none}
+#docNote{position:absolute;left:12px;right:12px;top:calc(56px + env(safe-area-inset-top,0px));z-index:2;font-size:12px;line-height:1.35;color:#3b4a40;background:rgba(255,255,255,.75);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border-radius:12px;padding:6px 10px}
+#docPager{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(var(--dock-b,18px) - var(--gap,0px));z-index:2;display:none;align-items:center;gap:10px;padding:4px;border-radius:22px;background:rgba(255,255,255,.8);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);box-shadow:0 4px 16px rgba(0,0,0,.15)}
+#docPager.show{display:flex}
+#docPager button{width:40px;height:36px;border-radius:18px;background:transparent;font-size:22px;color:#1d2a22}
+#pgNum{font-size:13px;font-weight:600;color:#1d2a22;min-width:44px;text-align:center}
 #docImg{position:absolute;left:0;top:0;transform-origin:0 0;max-width:none;user-select:none;-webkit-user-select:none;-webkit-user-drag:none;pointer-events:none}
 #top h1{margin:0;font-size:16px;font-weight:600;background:rgba(255,255,255,.85);display:inline-block;padding:6px 10px;border-radius:10px;pointer-events:auto}
 /*dock*/
@@ -50,9 +55,14 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-se
 <div id="c"></div>
 <div id="scrollfix" aria-hidden="true" style="height:calc(100vh + 1px);pointer-events:none"></div>
 <div id="info">
-<h3 style="margin-top:0">Есенина · версия 1.2.0</h3>
+<h3 style="margin-top:0">Есенина · версия 1.3.0</h3>
 <p id="diag" style="margin:0 0 6px;color:#777;font-size:12px"></p>
 <p style="margin:0 0 6px;color:#555">Нумерация: 1.x.0 — новый этап, 1.0.x — исправления внутри этапа.</p>
+<h3>1.3.0 · 17.11.2026 — этап 4: все документы по квартире</h3>
+<ul>
+<li>«Документы»: Стало (обмерный план), Было (замер изначальный), Стены (монтаж ПГП 75), Пол (84,92 м²), Газ (проект 2019, 5 листов + акт дымоходов), Техпаспорт 2006 (архив, неточный) — у каждого пояснение, у многостраничных листание</li>
+<li>Газ на 3D по проекту: ввод и стояк Ду50 в углу кухни у окна, транзит Ду50 под потолком вдоль наружной стены в санузел и к соседям, счётчик ВК-G4, Ду20 на высоте 640 к варочной панели и газовой колонке — сверить по месту</li>
+</ul>
 <h3>1.2.0 · 17.11.2026 — этап 3: новое меню</h3>
 <ul>
 <li>Меню в стиле iOS: иконки с подписями, больше стекла, мягкая подсветка выбранного</li>
@@ -125,14 +135,21 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-se
 <div id="docs" aria-label="Документы">
 <div id="docView"><img id="docImg" alt="" draggable="false"></div>
 <div id="docsTop"><div id="docTabs"></div><button id="docsClose" aria-label="Закрыть">✕</button></div>
+<div id="docNote"></div>
+<div id="docPager"><button id="pgPrev" aria-label="Назад">‹</button><span id="pgNum"></span><button id="pgNext" aria-label="Дальше">›</button></div>
 </div>
 <script src="three.min.js"></script>
 <script src="OrbitControls.js"></script>
 <script>
-const APP_VERSION='1.2.0';
+const APP_VERSION='1.3.0';
 // ---------- ДОКУМЕНТЫ (2D) ----------
 // сюда добавляются новые документы: {t:'Название', src:'docs/файл.png'} — каждый станет вкладкой
-const DOCS=[{t:'План (обмерный)',src:'docs/plan-2d.png'}];
+const DOCS=[
+ {t:'Стало',pages:['docs/plan-2d.png'],note:'Обмерный план «конечная» — по нему построена модель. Перегородка у прежнего места стиральной машины убрана.'},
+ {t:'Было',pages:['docs/before.jpg'],note:'Замер изначальный — квартира до ремонта.'},
+ {t:'Стены',pages:['docs/walls.jpg'],note:'Монтаж стен ПГП 75 — новые перегородки с размерами.'},
+ {t:'Пол',pages:['docs/floor.jpg'],note:'Площадь пола 85,92 м² минус 2 колонны по 0,5 = 84,92 м².'},
+];
 // автообновление: GitHub Pages кэширует страницу ~10 мин — проверяем version.json и перезагружаемся на новую версию
 function checkVersion(){if(location.protocol==='file:')return;fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{if(j&&j.v&&j.v!==APP_VERSION){location.replace(location.pathname+'?v='+encodeURIComponent(j.v));}}).catch(()=>{});}
 checkVersion();document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkVersion();});
@@ -477,6 +494,30 @@ function setLegs(v){while(legsG.children.length)legsG.remove(legsG.children[0]);
 setLegs(1);
 chair(1380,9425,Math.PI/2);chair(1380,10025,Math.PI/2);chair(2000,8835,Math.PI);chair(2000,10595,0);
 
+// ---------- ГАЗ (по проекту 04пг/18-ГСВ, 2019) ----------
+// ввод Ду50 в юго-западном углу кухни → стояк до 2880 → транзит Ду50 под потолком вдоль наружной стены в санузел → в соседнюю квартиру;
+// счётчик ВК-G4 у ввода, Ду20 на высоте 640 вдоль стены к варочной панели и к газовой колонке
+const gasM=CM(0xf2c200,{roughness:0.35,metalness:0.2}),gasD=CM(0x8a6d00,{roughness:0.4});
+const gasG=new THREE.Group();root.add(gasG);
+function pipe(a,b,r,m){const A=new THREE.Vector3(a[0]/1000,a[1]/1000,a[2]/1000),Bv=new THREE.Vector3(b[0]/1000,b[1]/1000,b[2]/1000);const L=A.distanceTo(Bv);
+ const g=new THREE.Mesh(new THREE.CylinderGeometry(r/1000,r/1000,L,10),m||gasM);g.position.copy(A).add(Bv).multiplyScalar(.5);
+ g.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),Bv.clone().sub(A).normalize());g.castShadow=true;gasG.add(g);
+ const j=new THREE.Mesh(new THREE.SphereGeometry(r/1000,10,8),m||gasM);j.position.copy(Bv);gasG.add(j);}
+const GX=45,GZ0=11125,GTOP=2880;
+pipe([GX,0,GZ0],[GX,GTOP,GZ0],30);                      // стояк Ду50 (существующий)
+pipe([GX,GTOP,GZ0],[GX,GTOP,GZ0-5000],30);               // транзит Ду50 под потолком
+pipe([GX,GTOP,GZ0-5000],[GX,GTOP,GZ0-5730],30);
+pipe([GX,GTOP,GZ0-5730],[GX+215,GTOP,GZ0-5730],30);
+pipe([GX+215,GTOP,GZ0-5730],[GX+215,GTOP-255,GZ0-5730],30); // в соседнюю квартиру
+gasG.add(B(GX-40,GZ0-170,GX+60,GZ0-110,GTOP-60,GTOP+60,gasD,gasG));            // кран Ду50
+// счётчик ВК-G4 и отвод Ду20
+gasG.add(B(GX+10,GZ0-380,GX+200,GZ0-150,440,700,CM(0xd9dbdd,{roughness:0.5}),gasG));
+pipe([GX,680,GZ0],[GX+40,680,GZ0-120],13);
+pipe([GX+40,640,GZ0-380],[GX+40,640,GZ0-4100],13);       // Ду20 на 640 вдоль стены
+pipe([GX+40,640,GZ0-1600],[GX+120,860,GZ0-1600],8);      // кран Ду15 и шланг к варочной панели
+pipe([GX+40,640,GZ0-4100],[GX+40,1900,GZ0-4100],13);     // к газовой колонке
+pipe([GX+40,1900,GZ0-4100],[1120,1900,GZ0-4100],13);
+pipe([1120,1900,GZ0-4100],[1120,1950,6800],10);
 // ---------- КОНДИЦИОНЕРЫ (по одному в спальнях, поток параллельно окну) ----------
 function ac(xWall,z,dirX){const d=dirX>0?1:-1;B(xWall,z-400,xWall+d*220,z+400,2650,2950,CM(0xfbfbfb,{roughness:0.3}));B(xWall+d*215,z-370,xWall+d*222,z+370,2665,2700,CM(0x9ea3a6));
  const fm=new THREE.MeshBasicMaterial({color:0x8fd0ff,transparent:true,opacity:0.18,depthWrite:false,side:THREE.DoubleSide});clipList.push(fm);const flow=new THREE.Mesh(new THREE.ConeGeometry(0.25,1.4,20,1,true),fm);
@@ -587,10 +628,14 @@ addEventListener('resize',fitScreen);const onRes=()=>{camera.aspect=VW()/VH();ca
  const box=document.getElementById('docs'),view=document.getElementById('docView'),img=document.getElementById('docImg'),tabs=document.getElementById('docTabs');
  let z={s:1,x:0,y:0},fit=1;const P=new Map();let tapT=0,moved=0;
  const apply=()=>{img.style.transform='translate('+z.x+'px,'+z.y+'px) scale('+z.s+')';};
- function fitDoc(){const w=img.naturalWidth,h=img.naturalHeight;if(!w)return;const vw=view.clientWidth,vh=view.clientHeight,top=70,bot=20;
-  fit=Math.min((vw-16)/w,(vh-top-bot)/h);z={s:fit,x:(vw-w*fit)/2,y:top+(vh-top-bot-h*fit)/2};apply();}
+ function fitDoc(){const w=img.naturalWidth,h=img.naturalHeight;if(!w)return;const vw=view.clientWidth,vh=view.clientHeight;
+  const top=note.offsetTop+note.offsetHeight+8,bot=pager.classList.contains('show')?70:20;fit=Math.min((vw-16)/w,(vh-top-bot)/h);z={s:fit,x:(vw-w*fit)/2,y:top+(vh-top-bot-h*fit)/2};apply();}
  function zoomAt(k,cx,cy){const ns=Math.min(fit*10,Math.max(fit*.8,z.s*k));k=ns/z.s;z.x=cx-(cx-z.x)*k;z.y=cy-(cy-z.y)*k;z.s=ns;apply();}
- function open(i){tabs.querySelectorAll('button').forEach((b,j)=>b.classList.toggle('on',j===i));img.onload=fitDoc;img.src=DOCS[i].src;if(img.complete&&img.naturalWidth)fitDoc();}
+ let cur=0,pg=0;const note=document.getElementById('docNote'),pager=document.getElementById('docPager'),pgNum=document.getElementById('pgNum');
+ function show(){const d=DOCS[cur];pg=Math.max(0,Math.min(d.pages.length-1,pg));img.onload=fitDoc;img.src=d.pages[pg];if(img.complete&&img.naturalWidth)fitDoc();
+  note.textContent=d.note||'';pager.classList.toggle('show',d.pages.length>1);pgNum.textContent=(pg+1)+' / '+d.pages.length;}
+ function open(i){cur=i;pg=0;tabs.querySelectorAll('button').forEach((b,j)=>b.classList.toggle('on',j===i));show();}
+ document.getElementById('pgPrev').onclick=()=>{pg--;show();};document.getElementById('pgNext').onclick=()=>{pg++;show();};
  DOCS.forEach((d,i)=>{const b=document.createElement('button');b.textContent=d.t;b.onclick=()=>open(i);tabs.appendChild(b);});
  document.getElementById('bDocs').onclick=()=>{box.classList.add('show');document.getElementById('bDocs').classList.add('on');open(0);};
  document.getElementById('docsClose').onclick=()=>{box.classList.remove('show');document.getElementById('bDocs').classList.remove('on');};
