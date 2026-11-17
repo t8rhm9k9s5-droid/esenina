@@ -36,9 +36,13 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-se
 <body>
 <div id="c"></div>
 <div id="info">
-<h3 style="margin-top:0">Есенина · версия 1.0.1</h3>
+<h3 style="margin-top:0">Есенина · версия 1.0.2</h3>
 <p id="diag" style="margin:0 0 6px;color:#777;font-size:12px"></p>
 <p style="margin:0 0 6px;color:#555">Нумерация: 1.x.0 — новый этап, 1.0.x — исправления внутри этапа.</p>
+<h3>1.0.2 · 17.11.2026 — исправления</h3>
+<ul>
+<li>Автообновление: при открытии сайт сам проверяет новую версию и подгружает её, без старой копии из кэша</li>
+</ul>
 <h3>1.0.1 · 17.11.2026 — исправления</h3>
 <ul>
 <li>Убрана надпись сверху, кнопка «!» перенесена в нижнее меню</li>
@@ -89,6 +93,10 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-se
 <script src="three.min.js"></script>
 <script src="OrbitControls.js"></script>
 <script>
+const APP_VERSION='1.0.2';
+// автообновление: GitHub Pages кэширует страницу ~10 мин — проверяем version.json и перезагружаемся на новую версию
+function checkVersion(){if(location.protocol==='file:')return;fetch('version.json?t='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{if(j&&j.v&&j.v!==APP_VERSION){location.replace(location.pathname+'?v='+encodeURIComponent(j.v));}}).catch(()=>{});}
+checkVersion();document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkVersion();});
 const H=3100, CUT=1150;
 const wrap=document.getElementById('c');
 function fitScreen(){const app=navigator.standalone||matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches;
