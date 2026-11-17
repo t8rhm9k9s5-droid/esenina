@@ -16,14 +16,15 @@
 :root{--dock-b:max(18px,calc(env(safe-area-inset-bottom,0px) - 16px))}
 html{min-height:100%;overscroll-behavior:none}
 body{margin:0;min-height:100%;overscroll-behavior:none;background:#e9e7e2;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color:#222}
-#c{position:fixed;inset:0;touch-action:none}
+#c{position:fixed;top:0;left:0;right:0;height:var(--H,100%);touch-action:none}
 #top{position:fixed;top:0;left:0;right:0;padding:calc(10px + env(safe-area-inset-top,0px)) 12px 6px;pointer-events:none;background:transparent}
 #top h1{margin:0;font-size:16px;font-weight:600;background:rgba(255,255,255,.85);display:inline-block;padding:6px 10px;border-radius:10px;pointer-events:auto}
-#bar{position:fixed;left:0;right:0;bottom:0;padding:8px 8px var(--dock-b);display:flex;flex-wrap:wrap;gap:6px;justify-content:center;background:linear-gradient(transparent,rgba(233,231,226,.95) 30%)}
-button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;font:inherit;font-size:13px;border:0;border-radius:18px;padding:8px 12px;background:#fff;color:#222;box-shadow:0 1px 3px rgba(0,0,0,.15)}
-button.on{background:#2f5d45;color:#fff}
-#legs{display:none;gap:6px;flex-wrap:wrap;justify-content:center;width:100%}
-#legs.show{display:flex}
+button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;font:inherit;border:0;cursor:pointer}
+#bar{position:fixed;z-index:60;left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));bottom:calc(var(--dock-b,18px) - var(--gap,0px));display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:5px;border-radius:24px;background:rgba(255,255,255,.55);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);border:.5px solid rgba(255,255,255,.7);box-shadow:0 8px 28px rgba(0,0,0,.14);max-width:520px;margin:0 auto}
+#bar button,#legs button{height:34px;padding:0 6px;border-radius:17px;background:transparent;box-shadow:none;font-size:12.5px;font-weight:500;color:#1d2a22;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#bar button.on,#legs button.on{background:#2f5d45;color:#fff}
+#legs{position:fixed;z-index:60;left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));bottom:calc(var(--dock-b,18px) - var(--gap,0px) + 92px);display:none;grid-template-columns:repeat(2,1fr);gap:4px;padding:5px;border-radius:24px;background:rgba(255,255,255,.55);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);border:.5px solid rgba(255,255,255,.7);box-shadow:0 8px 28px rgba(0,0,0,.14);max-width:520px;margin:0 auto}
+#legs.show{display:grid}
 #info{position:fixed;top:calc(env(safe-area-inset-top) + 48px);right:10px;left:10px;max-width:420px;margin-left:auto;max-height:60vh;overflow:auto;background:rgba(255,255,255,.96);border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.4;display:none;box-shadow:0 4px 18px rgba(0,0,0,.2)}
 #info.show{display:block}
 #info h3{margin:8px 0 4px;font-size:14px}
@@ -63,26 +64,30 @@ button.on{background:#2f5d45;color:#fff}
 </ul>
 </div>
 <div id="bar">
-<button id="bCut" class="on">Обзор (срез)</button>
-<button id="bFull">Стены во всю высоту</button>
-<button id="bTop">Вид сверху</button>
-<button id="b3d">3D-вид</button>
+<button id="bCut" class="on">Срез</button>
+<button id="bFull">Стены</button>
+<button id="bTop">Сверху</button>
+<button id="b3d">3D</button>
 <button id="bNight">Вечер</button>
 <button id="bLbl" class="on">Подписи</button>
-<button id="bLegs">Опоры стола</button>
-<button id="bInfo">Что учтено</button>
+<button id="bLegs">Опоры</button>
+<button id="bInfo">Учтено</button>
+</div>
 <div id="legs">
-<button data-v="1" class="on">П-опоры металл ✓</button>
+<button data-v="1" class="on">П-опоры металл</button>
 <button data-v="0">4 ножки сосна</button>
 <button data-v="2">Х-опоры сосна</button>
 <button data-v="3">2 ножки + к стене</button>
-</div>
 </div>
 <script src="three.min.js"></script>
 <script src="OrbitControls.js"></script>
 <script>
 const H=3100, CUT=1150;
 const wrap=document.getElementById('c');
+function fitScreen(){const sh=(navigator.standalone&&screen.height>innerHeight)?screen.height:innerHeight;
+ document.documentElement.style.setProperty('--H',sh+'px');
+ const gap=Math.max(0,sh-innerHeight);document.documentElement.style.setProperty('--gap',gap+'px');}
+fitScreen();
 const renderer=new THREE.WebGLRenderer({antialias:true});
 renderer.setPixelRatio(Math.min(devicePixelRatio,2));
 const VW=()=>wrap.clientWidth||innerWidth, VH=()=>wrap.clientHeight||innerHeight;
@@ -485,7 +490,7 @@ document.getElementById('bInfo').onclick=e=>{const i=document.getElementById('in
 document.getElementById('bLegs').onclick=e=>{const l=document.getElementById('legs');l.classList.toggle('show');e.target.classList.toggle('on',l.classList.contains('show'));
  if(l.classList.contains('show')){camera.position.set(3.4,3.3,11.2);controls.target.set(1.95,0.45,9.67);controls.update();}};
 document.querySelectorAll('#legs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#legs button').forEach(x=>x.classList.remove('on'));b.classList.add('on');setLegs(+b.dataset.v);});
-const onRes=()=>{camera.aspect=VW()/VH();camera.updateProjectionMatrix();renderer.setSize(VW(),VH());};addEventListener('resize',onRes);addEventListener('orientationchange',()=>setTimeout(onRes,300));document.addEventListener('visibilitychange',()=>setTimeout(onRes,200));
+addEventListener('resize',fitScreen);const onRes=()=>{camera.aspect=VW()/VH();camera.updateProjectionMatrix();renderer.setSize(VW(),VH());};addEventListener('resize',onRes);addEventListener('orientationchange',()=>setTimeout(onRes,300));document.addEventListener('visibilitychange',()=>setTimeout(onRes,200));
 (function loop(){requestAnimationFrame(loop);controls.update();renderer.render(scene,camera);})();
 </script>
 </body>
